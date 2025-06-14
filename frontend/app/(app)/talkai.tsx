@@ -8,7 +8,7 @@ export default function talkAi() {
     const { scaleFont,user } = useAuth();
     const router = useRouter();
     const onContinue = () => {
-        router.replace('/chat');
+        router.replace('/dashboard');
     }
     return (
         <>

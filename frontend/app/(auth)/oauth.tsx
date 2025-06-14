@@ -121,7 +121,7 @@ export default function Oauth() {
                         gap: scaleFont(16)
                     }}>
                         <OauthButton title="Sign Up Using Google Account" icon="google" onClick={() => onGoogleOauth()} />
-                        <OauthButton title="Sign Up Using Apple Account" icon="apple" onClick={() => onAppleOauth()} />
+                        <OauthButton title="Sign Up Using Apple Account" icon="apple" onClick={() => onGoogleOauth()} />
                     </View>
                 </View>
             </MainLayout>
