@@ -13,6 +13,7 @@ export default function Info() {
     const { scaleFont, user } = useAuth();
     const router = useRouter();
     const [date, setDate] = useState(new Date(2000, 0, 1));
+    const [waiting, setWaiting] = useState(false);
     const [show, setShow] = useState(false);
     const [data, setData] = useState({
         pfirstName: '',
@@ -108,17 +109,19 @@ export default function Info() {
                         </View>
                     </View>
                     <ConfirmButton
+                        waiting={waiting}
                         onClick={() => {
-                            // router.replace('/relationinit')
+                            setWaiting(true);   
                             axios.put('/auth/updateFriend', {
                                 realname: data.pfirstName,
                                 birthday: dayjs(date).format('D MMMM YYYY'),
                             }).then(res=>{
                                 showToast("Update Success");
-                                router.replace('/relationinit')
+                                router.replace('/relationinit');
+                                setWaiting(false);
                             }).catch(err=>{
+                                setWaiting(false);
                                 showToast(err?.response?.data?.message || "Server error");
-                                console.log(err);
                             })
                         }}
                         title="Next"

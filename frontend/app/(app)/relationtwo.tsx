@@ -9,26 +9,28 @@ import React from 'react';
 import { Dimensions, Pressable, Text, View } from 'react-native';
 export default function RelationTwo() {
     const [selectedOption, setSelectedOption] = React.useState<string | null>(null);
+    const [waiting, setWaiting] = React.useState(false);
     const { scaleFont, user } = useAuth();
     const router = useRouter();
-    if((user?.friend?.relation as any).find((item:any)=>item.summary==="live together"))
-    {
+    if ((user?.friend?.relation as any).find((item: any) => item.summary === "live together")) {
         router.replace('/relationthree');
     }
     const onContinue = () => {
+        setWaiting(true);
         axios.put('/auth/addRelation', {
-          summary:"live together",
-          question:"Do you live together?",
-          answer:selectedOption,
+            summary: "live together",
+            question: "Do you live together?",
+            answer: selectedOption,
         })
-        .then(res=>{
-            showToast("Relationship update successful");
-            router.replace('/relationthree');
-        })
-        .catch(err=>{
-            showToast(err?.response?.data?.message || "Server error");
-            console.log(err)
-        })
+            .then(res => {
+                showToast("Relationship update successful");
+                router.replace('/relationthree');
+                setWaiting(false);
+            })
+            .catch(err => {
+                showToast(err?.response?.data?.message || "Server error");
+                setWaiting(false);
+            })
     }
 
     const options = [
@@ -54,7 +56,7 @@ export default function RelationTwo() {
                             fontSize: scaleFont(32),
                             color: '#181818',
                             lineHeight: scaleFont(38.4),
-                            maxWidth:scaleFont(288)
+                            maxWidth: scaleFont(288)
                         }}>
                             Do you live together?
                         </Text>
@@ -68,33 +70,33 @@ export default function RelationTwo() {
                             columnGap: scaleFont(8),
                         }}>
                             {options.map((option, index) => (
-                                <LinearGradient
-                                    key={index}
-                                    colors={selectedOption === option ? ['#EBD2FE', '#FBB9DD'] : ['#FFFFFF', '#FFFFFF']}
-                                    start={{ x: 0.5, y: 0 }}   // middle top
-                                    end={{ x: 0.5, y: 1 }}     // middle bottom
-                                    style={{
-                                        padding: scaleFont(16),
-                                        borderRadius: scaleFont(15),
-                                    }}
-                                >
-                                    <Pressable style={{
-                                    }} onPress={() => {
-                                        setSelectedOption(option);
-                                    }}>
+                                <Pressable style={{
+                                }} onPress={() => {
+                                    setSelectedOption(option);
+                                }} key={index}>
+                                    <LinearGradient
+                                        colors={selectedOption === option ? ['#EBD2FE', '#FBB9DD'] : ['#FFFFFF', '#FFFFFF']}
+                                        start={{ x: 0.5, y: 0 }}   // middle top
+                                        end={{ x: 0.5, y: 1 }}     // middle bottom
+                                        style={{
+                                            padding: scaleFont(16),
+                                            borderRadius: scaleFont(15),
+                                        }}
+                                    >
                                         <Text style={{
                                             fontFamily: 'SFProMedium',
                                             fontSize: scaleFont(16),
                                             color: selectedOption === option ? '#FFFFFF' : '#181818',
                                         }}>{option}</Text>
-                                    </Pressable>
-                                </LinearGradient>
+                                    </LinearGradient>
+                                </Pressable>
                             ))}
                         </View>
                     </View>
                     <ConfirmButton
                         onClick={onContinue}
                         title="Next"
+                        waiting={waiting}
                         style={{
                             marginTop: scaleFont(24),
                             gap: scaleFont(5)

@@ -11,24 +11,26 @@ export default function RelationThree() {
     const [selectedOption, setSelectedOption] = React.useState<string | null>(null);
     const { scaleFont, user } = useAuth();
     const router = useRouter();
-    if((user?.friend?.relation as any).find((item:any)=>item.summary==="have kids"))
-    {
+    const [waiting, setWaiting] = React.useState(false);
+    if ((user?.friend?.relation as any).find((item: any) => item.summary === "have kids")) {
         router.replace('/dashboard');
     }
     const onContinue = () => {
+        setWaiting(true);
         axios.put('/auth/addRelation', {
-          summary:"have kids",
-          question:"Do either of you have kids?",
-          answer:selectedOption,
+            summary: "have kids",
+            question: "Do either of you have kids?",
+            answer: selectedOption,
         })
-        .then(res=>{
-            showToast("Relationship update successful");
-            router.replace('/talkai');
-        })
-        .catch(err=>{
-            showToast(err?.response?.data?.message || "Server error");
-            console.log(err)
-        })
+            .then(res => {
+                showToast("Relationship update successful");
+                router.replace('/talkai');
+                setWaiting(false);
+            })
+            .catch(err => {
+                showToast(err?.response?.data?.message || "Server error");
+                setWaiting(false);
+            })
     }
 
     const options = [
@@ -54,18 +56,18 @@ export default function RelationThree() {
                             fontSize: scaleFont(32),
                             color: '#181818',
                             lineHeight: scaleFont(38.4),
-                            maxWidth:scaleFont(288)
+                            maxWidth: scaleFont(288)
                         }}>
                             Do either of you have kids?
                         </Text>
                         <Text style={{
-                            marginTop:scaleFont(16),
+                            marginTop: scaleFont(16),
                             fontFamily: 'SFPro',
                             fontSize: scaleFont(14),
                             color: '#5F5F5F',
                             lineHeight: scaleFont(16.8),
                         }}>
-                            Let us know if you or your partner have children either 
+                            Let us know if you or your partner have children either
                             tohether or from previous relationships.
                         </Text>
                         <View style={{
@@ -78,31 +80,31 @@ export default function RelationThree() {
                             columnGap: scaleFont(8),
                         }}>
                             {options.map((option, index) => (
-                                <LinearGradient
-                                    key={index}
-                                    colors={selectedOption === option ? ['#EBD2FE', '#FBB9DD'] : ['#FFFFFF', '#FFFFFF']}
-                                    start={{ x: 0.5, y: 0 }}   // middle top
-                                    end={{ x: 0.5, y: 1 }}     // middle bottom
-                                    style={{
-                                        padding: scaleFont(16),
-                                        borderRadius: scaleFont(15),
-                                    }}
-                                >
-                                    <Pressable style={{
-                                    }} onPress={() => {
-                                        setSelectedOption(option);
-                                    }}>
+                                <Pressable style={{
+                                }} onPress={() => {
+                                    setSelectedOption(option);
+                                }} key={index}>
+                                    <LinearGradient
+                                        colors={selectedOption === option ? ['#EBD2FE', '#FBB9DD'] : ['#FFFFFF', '#FFFFFF']}
+                                        start={{ x: 0.5, y: 0 }}   // middle top
+                                        end={{ x: 0.5, y: 1 }}     // middle bottom
+                                        style={{
+                                            padding: scaleFont(16),
+                                            borderRadius: scaleFont(15),
+                                        }}
+                                    >
                                         <Text style={{
                                             fontFamily: 'SFProMedium',
                                             fontSize: scaleFont(16),
                                             color: selectedOption === option ? '#FFFFFF' : '#181818',
                                         }}>{option}</Text>
-                                    </Pressable>
-                                </LinearGradient>
+                                    </LinearGradient>
+                                </Pressable>
                             ))}
                         </View>
                     </View>
                     <ConfirmButton
+                        waiting={waiting}
                         onClick={onContinue}
                         title="Next"
                         style={{

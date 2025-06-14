@@ -1,16 +1,17 @@
 import React from "react";
-import { Pressable, StyleProp, Text, View, ViewStyle } from "react-native";
+import { Image, Pressable, StyleProp, Text, View, ViewStyle } from "react-native";
 import { useAuth } from "../../context/AuthContext";
 import GradientButton from "./Gradient";
-export function ConfirmButton({ title, style, onClick }: { title: string, style?: StyleProp<ViewStyle>, onClick?: () => void }) {
+export function ConfirmButton({ title, style, onClick, waiting = false }: { title: string, style?: StyleProp<ViewStyle>, onClick?: () => void, waiting?: boolean }) {
     const [isHover, setIsHover] = React.useState(false);
     const { scaleFont } = useAuth();
     return (
         <>
             <Pressable
-                onTouchStart={() => setIsHover(true)}
-                onTouchEnd={() => setIsHover(false)}
+                onTouchStart={() => {!waiting&&setIsHover(true)}}
+                onTouchEnd={() => {isHover&&setIsHover(false)}}
                 onPress={onClick}
+                disabled={waiting}
                 style={[
                     {
                         flexDirection: 'row',
@@ -30,13 +31,22 @@ export function ConfirmButton({ title, style, onClick }: { title: string, style?
                     borderWidth: scaleFont(1),
                     borderColor: '#F8F8F8'
                 }}>
-                    <Text style={{
-                        fontFamily: 'SFProSemiBold',
-                        fontSize: scaleFont(16),
-                        color: '#181818',
-                    }}>
-                        {title}
-                    </Text>
+                    {
+                        waiting ? (
+                            <Image
+                                source={require('@/assets/images/waiting.gif')}
+                                style={{ width: 64, height: 64 }}
+                            />
+                        ) : (
+                            <Text style={{
+                                fontFamily: 'SFProSemiBold',
+                                fontSize: scaleFont(16),
+                                color: '#181818',
+                            }}>
+                                {title}
+                            </Text>
+                        )
+                    }
                 </View>
                 <GradientButton isHover={isHover} />
             </Pressable>

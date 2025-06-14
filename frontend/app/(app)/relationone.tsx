@@ -9,12 +9,14 @@ import React from 'react';
 import { Dimensions, Pressable, Text, View } from 'react-native';
 export default function RelationOne() {
     const [selectedOption, setSelectedOption] = React.useState<string | null>(null);
+    const [waiting, setWaiting] = React.useState(false);
     const { scaleFont, user } = useAuth();
     const router = useRouter();
     if ((user?.friend?.relation as any).find((item: any) => item.summary === "relationship situation")) {
         router.replace('/relationtwo');
     }
     const onContinue = () => {
+        setWaiting(true);
         axios.put('/auth/addRelation', {
             summary: "relationship situation",
             question: "Tell me about your current relationship situation. How satisfied do you feel with this aspect of your life right now?",
@@ -23,10 +25,11 @@ export default function RelationOne() {
             .then(res => {
                 showToast("Relationship update successful");
                 router.replace('/relationtwo');
+                setWaiting(false);
             })
             .catch(err => {
                 showToast(err?.response?.data?.message || "Server error");
-                console.log(err)
+                setWaiting(false);
             })
     }
 
@@ -74,9 +77,8 @@ export default function RelationOne() {
                                 <Pressable style={{
                                 }} onPress={() => {
                                     setSelectedOption(option.title);
-                                }}>
+                                }} key={index}>
                                     <LinearGradient
-                                        key={index}
                                         colors={selectedOption === option.title ? ['#EBD2FE', '#FBB9DD'] : ['#FFFFFF', '#FFFFFF']}
                                         start={{ x: 0.5, y: 0 }}   // middle top
                                         end={{ x: 0.5, y: 1 }}     // middle bottom
@@ -97,6 +99,7 @@ export default function RelationOne() {
                         </View>
                     </View>
                     <ConfirmButton
+                        waiting={waiting}
                         onClick={onContinue}
                         title="Next"
                         style={{

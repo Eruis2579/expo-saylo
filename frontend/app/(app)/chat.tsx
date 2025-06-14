@@ -1,120 +1,135 @@
-// ChatScreen.js
-import React, { useState } from 'react';
-import { FlatList, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+// components/ChatScreen.tsx
+import dayjs from 'dayjs';
+import React, { useRef, useState } from 'react';
+import {
+    FlatList,
+    KeyboardAvoidingView,
+    Platform,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function Chat() {
+const ChatScreen = () => {
   const [messages, setMessages] = useState([
-    {
-      id: '1',
-      text: "Morning beautiful! Dreamed about you all night 💓 How's your day starting?",
-      time: '14:40',
-      fromMe: true,
-    },
+    { id: '1', text: 'Hey! How are you?', sender: 'other', time: '10:02 AM' },
+    { id: '2', text: "I'm good! You?", sender: 'me', time: '10:03 AM' },
   ]);
   const [input, setInput] = useState('');
+  const flatListRef = useRef<FlatList>(null);
 
   const sendMessage = () => {
-    if (input.trim() === '') return;
-    setMessages([...messages, {
+    if (!input.trim()) return;
+    const newMessage = {
       id: Date.now().toString(),
       text: input,
-      time: new Date().toLocaleTimeString().slice(0, 5),
-      fromMe: true,
-    }]);
+      sender: 'me',
+      time: dayjs().format('hh:mm A'),
+    };
+    setMessages((prev) => [newMessage, ...prev]);
     setInput('');
   };
 
-  const renderItem = ({ item }: { item: any }) => (
-    <View style={[styles.messageContainer, item.fromMe ? styles.sent : styles.received]}>
-      <Text style={styles.messageText}>{item.text}</Text>
-      <Text style={styles.messageTime}>{item.time}</Text>
-    </View>
-  );
+  const renderItem = ({ item }: { item: any }) => {
+    const isMe = item.sender === 'me';
+    return (
+      <View
+        style={[
+          styles.messageContainer,
+          isMe ? styles.sentMessage : styles.receivedMessage,
+        ]}
+      >
+        <Text style={styles.messageText}>{item.text}</Text>
+        <Text style={styles.timestamp}>{item.time}</Text>
+      </View>
+    );
+  };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-      keyboardVerticalOffset={90}
-    >
+    <SafeAreaView style={styles.container}>
       <FlatList
+        ref={flatListRef}
         data={messages}
-        keyExtractor={(item) => item.id}
         renderItem={renderItem}
-        contentContainerStyle={styles.messagesList}
+        keyExtractor={(item) => item.id}
         inverted
+        contentContainerStyle={{ padding: 12 }}
+        showsVerticalScrollIndicator={false}
       />
 
-      <View style={styles.inputContainer}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        keyboardVerticalOffset={90}
+        style={styles.inputWrapper}
+      >
         <TextInput
           style={styles.input}
-          placeholder="Type a message"
+          placeholder="Type your message..."
           value={input}
           onChangeText={setInput}
+          onSubmitEditing={sendMessage}
         />
         <TouchableOpacity onPress={sendMessage} style={styles.sendButton}>
-          <Text style={styles.sendText}>➤</Text>
+          <Text style={{ color: 'white', fontWeight: 'bold' }}>Send</Text>
         </TouchableOpacity>
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
-}
+};
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fce9f1',
-    },
-    messagesList: {
-      padding: 16,
-      flexGrow: 1,
-      justifyContent: 'flex-end',
+      backgroundColor: '#FFFFFF',
     },
     messageContainer: {
       maxWidth: '80%',
+      borderRadius: 16,
       padding: 10,
-      borderRadius: 12,
-      marginBottom: 10,
+      marginVertical: 6,
     },
-    sent: {
-      backgroundColor: '#fdd9ec',
+    sentMessage: {
+      backgroundColor: '#FCEFFB',
       alignSelf: 'flex-end',
     },
-    received: {
-      backgroundColor: '#e6e6e6',
+    receivedMessage: {
+      backgroundColor: '#F7F7F7',
       alignSelf: 'flex-start',
     },
     messageText: {
       fontSize: 16,
-      color: '#333',
+      color: '#181818',
     },
-    messageTime: {
-      fontSize: 10,
+    timestamp: {
+      fontSize: 11,
       color: '#666',
-      alignSelf: 'flex-end',
       marginTop: 4,
+      alignSelf: 'flex-end',
     },
-    inputContainer: {
+    inputWrapper: {
       flexDirection: 'row',
       padding: 10,
-      backgroundColor: '#fff',
       borderTopWidth: 1,
-      borderColor: '#ddd',
+      borderTopColor: '#ddd',
+      backgroundColor: '#fff',
+      alignItems: 'center',
     },
     input: {
       flex: 1,
+      padding: 12,
+      backgroundColor: '#f1f1f1',
       borderRadius: 20,
-      backgroundColor: '#f0f0f0',
-      paddingHorizontal: 15,
       fontSize: 16,
     },
     sendButton: {
       marginLeft: 8,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    sendText: {
-      fontSize: 24,
-      color: '#d63384',
+      paddingVertical: 10,
+      paddingHorizontal: 16,
+      backgroundColor: '#0b81ff',
+      borderRadius: 20,
     },
   });
   
+export default ChatScreen;

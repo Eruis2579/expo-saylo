@@ -13,6 +13,7 @@ export default function Info() {
     const { scaleFont,signIn } = useAuth();
     const router = useRouter();
     const [date, setDate] = useState(new Date(2000, 0, 1));
+    const [waiting, setWaiting] = useState(false);
     const [show, setShow] = useState(false);
     const [data, setData] = useState({
         firstName: '',
@@ -105,17 +106,20 @@ export default function Info() {
                         </View>
                     </View>
                     <ConfirmButton
+                        waiting={waiting}
                         onClick={() => {
+                            setWaiting(true);
                             axios.post('/auth/google/signup', {
                                 realname: data.firstName,
                                 birthday: dayjs(date).format('D MMMM YYYY'),
                             }).then(res => {
                                 showToast("Signup Success");
                                 signIn(res.data);
+                                setWaiting(false);
                                 router.replace('/partner')
                             }).catch(err => {
+                                setWaiting(false);
                                 showToast(err?.response?.data?.message || "Server error");
-                                console.log(err);
                             })
                         }}
                         title="Next"
