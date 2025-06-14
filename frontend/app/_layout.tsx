@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { useFonts } from 'expo-font';
 import { Slot } from 'expo-router';
-import { Platform, ScrollView } from 'react-native';
 import { AuthProvider } from '../context/AuthContext';
 import "../global.css";
 axios.defaults.withCredentials = true;
@@ -21,16 +20,9 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
-  const platform = Platform.OS;
   return (
     <AuthProvider>
-        {
-          platform == 'web' ?
-            <Slot /> :
-            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-              <Slot />
-            </ScrollView>
-        }
+        <Slot />
     </AuthProvider>
   );
 }

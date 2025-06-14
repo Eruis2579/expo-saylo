@@ -18,7 +18,7 @@ export default function Info() {
         pfirstName: '',
         pbirthday: '',
     })
-    if (user?.friend.realname && user?.friend.birthday) {
+    if (user?.friend?.realname && user?.friend?.birthday) {
         router.replace('/relationone')
     }
     const onChange = (event: any, selectedDate?: Date) => {
@@ -117,7 +117,7 @@ export default function Info() {
                                 showToast("Update Success");
                                 router.replace('/relationinit')
                             }).catch(err=>{
-                                showToast("Update Failed");
+                                showToast(err?.response?.data?.message || "Server error");
                                 console.log(err);
                             })
                         }}

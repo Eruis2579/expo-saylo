@@ -114,6 +114,7 @@ export default function Info() {
                                 signIn(res.data);
                                 router.replace('/partner')
                             }).catch(err => {
+                                showToast(err?.response?.data?.message || "Server error");
                                 console.log(err);
                             })
                         }}

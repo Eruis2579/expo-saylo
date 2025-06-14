@@ -26,7 +26,7 @@ export default function RelationTwo() {
             router.replace('/relationthree');
         })
         .catch(err=>{
-            showToast("Relationship update failed");
+            showToast(err?.response?.data?.message || "Server error");
             console.log(err)
         })
     }
