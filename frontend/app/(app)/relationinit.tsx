@@ -1,26 +1,25 @@
-import LoginLogo from '@/assets/images/logo/welcome.svg';
 import { ConfirmButton } from '@/components/Buttons/Confirm';
 import MainLayout from '@/components/MainLayout';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { Dimensions, Image, Text, View } from 'react-native';
-export default function Welcome() {
-    const { scaleFont } = useAuth();
+export default function RelationInit() {
+    const { scaleFont,user } = useAuth();
     const router = useRouter();
     const onContinue = () => {
-        router.replace('/info');
+        router.replace('/relationone');
     }
     return (
         <>
             <MainLayout showHeader={true} showFooter={false} showbar={false}>
                 <View style={{
-                    marginTop: scaleFont(77),
+                    marginTop: scaleFont(48),
                     flexDirection: 'column',
                     paddingLeft: scaleFont(21),
                     paddingRight: scaleFont(21),
                     justifyContent: 'space-between',
-                    minHeight: Dimensions.get('window').height - scaleFont(208),
+                    minHeight: Dimensions.get('window').height - scaleFont(164),
                 }}>
                     <View style={{
                         flexDirection: 'column',
@@ -36,26 +35,21 @@ export default function Welcome() {
                             color: '#181818',
                             lineHeight: scaleFont(57.6),
                         }}>
-                            Welcome to
+                            Get Ready to explore your relationship
                         </Text>
-                        <LoginLogo style={{
-                            width: scaleFont(206),
-                            height: scaleFont(87),
-                        }} />
                         <Text style={{
                             marginTop: scaleFont(16),
-                            maxWidth: scaleFont(230),
                             fontFamily: 'SFPro',
                             fontSize: scaleFont(14),
                             color: '#5F5F5F',
                             lineHeight: scaleFont(16.8),
                         }}>
-                            To personalize your experience, we’ll ask you a few questions
+                            We’ll ask a few details about your relationship to provide you with relevant couple conversations
                         </Text>
                     </View>
                     <ConfirmButton
                         onClick={onContinue}
-                        title="Continue"
+                        title="Next"
                         style={{
                             marginTop: scaleFont(24),
                             gap: scaleFont(5)

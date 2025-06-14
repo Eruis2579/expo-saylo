@@ -10,14 +10,17 @@ import { ConfirmButton } from "../../components/Buttons/Confirm";
 import GradientInput from "../../components/Input/GradientInput";
 import { useAuth } from "../../context/AuthContext";
 export default function Info() {
-    const { scaleFont,signIn } = useAuth();
+    const { scaleFont, user } = useAuth();
     const router = useRouter();
     const [date, setDate] = useState(new Date(2000, 0, 1));
     const [show, setShow] = useState(false);
     const [data, setData] = useState({
-        firstName: '',
+        pfirstName: '',
+        pbirthday: '',
     })
-
+    if (user?.friend.realname && user?.friend.birthday) {
+        router.replace('/relationone')
+    }
     const onChange = (event: any, selectedDate?: Date) => {
         if (Platform.OS === 'android') {
             if (selectedDate) setDate(selectedDate);
@@ -26,12 +29,12 @@ export default function Info() {
         if (selectedDate) setDate(selectedDate);
     };
     const showToast = (text:string) => {
-            if (Platform.OS === 'android') {
-                ToastAndroid.show(text, ToastAndroid.SHORT);
-            }else{
-                alert(text);
-            }
-          };
+        if (Platform.OS === 'android') {
+            ToastAndroid.show(text, ToastAndroid.SHORT);
+        }else{
+            alert(text);
+        }
+    };
     return (
         <>
             <MainLayout showHeader={true} showFooter={false} showbar={false}>
@@ -52,21 +55,21 @@ export default function Info() {
                             color: '#181818',
                             lineHeight: scaleFont(38.4),
                         }}>
-                            Tell us a little about yourself
+                            Tell us a little about your partner
                         </Text>
                         <View style={{
                             marginTop: scaleFont(32),
                         }}>
                             <GradientInput
-                                name="Your First Name"
-                                placeholder="Your First Name"
+                                name="Partner’s First Name"
+                                placeholder="Partner’s First Name"
                                 id="firstName"
-                                value={data.firstName || ""}
-                                onChangeText={(text) => setData({ ...data, firstName: text })}
+                                value={data.pfirstName || ""}
+                                onChangeText={(text) => setData({ ...data, pfirstName: text })}
                             />
                             <GradientInput
-                                name="Your Bithday"
-                                placeholder="Your Bithday"
+                                name="Partner’s Birthday"
+                                placeholder="Partner’s Birthday"
                                 id="birthday"
                                 value={dayjs(date).format('D MMMM YYYY')}
                                 style={{
@@ -96,7 +99,7 @@ export default function Info() {
                                     <DateTimePicker
                                         value={date}
                                         mode="date"
-                                        display="spinner"
+                                        display="spinner" // Recommended for Android
                                         onChange={onChange}
                                         maximumDate={new Date()}
                                     />
@@ -106,14 +109,15 @@ export default function Info() {
                     </View>
                     <ConfirmButton
                         onClick={() => {
-                            axios.post('/auth/google/signup', {
-                                realname: data.firstName,
+                            // router.replace('/relationinit')
+                            axios.put('/auth/updateFriend', {
+                                realname: data.pfirstName,
                                 birthday: dayjs(date).format('D MMMM YYYY'),
-                            }).then(res => {
-                                showToast("Signup Success");
-                                signIn(res.data);
-                                router.replace('/partner')
-                            }).catch(err => {
+                            }).then(res=>{
+                                showToast("Update Success");
+                                router.replace('/relationinit')
+                            }).catch(err=>{
+                                showToast("Update Failed");
                                 console.log(err);
                             })
                         }}

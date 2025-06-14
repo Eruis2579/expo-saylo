@@ -1,8 +1,19 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { Dimensions } from 'react-native';
 type AuthContextType = {
-  user: { name: string } | null;
-  signIn: (name: string) => void;
+  user: {
+    realname: string,
+    gender: string,
+    birthday: string,
+    email: string,
+    friend: {
+      realname: string,
+      gender: string,
+      birthday: string,
+      relation: string
+    }
+  } | null;
+  signIn: (user: { realname: string, gender: string, birthday: string, email: string, friend: { realname: string, gender: string, birthday: string, relation: string } }) => void;
   signOut: () => void;
   scaleFont: (size: number) => number;
 };
@@ -10,9 +21,9 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<{ name: string } | null>(null);
+  const [user, setUser] = useState<{ realname: string, gender: string, birthday: string, email: string, friend: { realname: string, gender: string, birthday: string, relation: string } } | null>(null);
 
-  const signIn = (name: string) => setUser({ name });
+  const signIn = (user: { realname: string, gender: string, birthday: string, email: string, friend: { realname: string, gender: string, birthday: string, relation: string } }) => setUser(user);
   const signOut = () => setUser(null);
   const [screenWidth, setScreenWidth] = useState(Dimensions.get('window').width);
 

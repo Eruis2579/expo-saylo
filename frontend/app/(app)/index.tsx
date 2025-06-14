@@ -3,7 +3,7 @@ import { Text } from 'react-native';
 function AppLayout() {
     const { user } = useAuth();
     return <>
-        <Text>{user?.name}</Text>
+        <Text>{user?.friend.realname}</Text>
     </>
 }
 export default AppLayout;

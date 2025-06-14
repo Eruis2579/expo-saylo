@@ -9,7 +9,6 @@ export default function GradientInput({
     id,
     style,
     onFocus,
-    onBlur,
     value,
     onChangeText,
 }: {
@@ -18,7 +17,6 @@ export default function GradientInput({
     id: string;
     style?: StyleProp<ViewStyle>;
     onFocus?: () => void;
-    onBlur?: () => void;
     value?: string;
     onChangeText?: (e: any) => void;
 }) {
@@ -57,8 +55,8 @@ export default function GradientInput({
                     }}
                 >
                     <TextInput
+                        onTouchStart={onFocus}
                         onFocus={onFocus}
-                        onBlur={onBlur}
                         id={id}
                         value={value}
                         onChangeText={onChangeText}

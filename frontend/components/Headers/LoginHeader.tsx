@@ -6,7 +6,7 @@ export function LoginHeader() {
     const { scaleFont } = useAuth();
     const router = useRouter();
     return <>
-        <Pressable onPress={()=>{router.replace('/(auth)/signup')}} >
+        <Pressable onPress={()=>{router.replace('/signup')}} >
             <LoginLogo style={{
                 width: scaleFont(85),
                 height: scaleFont(36),

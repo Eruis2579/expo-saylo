@@ -1,8 +1,8 @@
 import { useAuth } from '@/context/AuthContext';
+import { SocketProvider } from '@/context/SocketContext';
 import { Slot, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
-
 export default function AppLayout() {
   const { user } = useAuth();
   const router = useRouter();
@@ -11,6 +11,7 @@ export default function AppLayout() {
     setIsMount(true)
   }, []);
   useEffect(() => {
+    console.log(user)
     if (isMount) {
       if (!user) {
         // If not logged in, redirect to login page in (auth)
@@ -28,12 +29,8 @@ export default function AppLayout() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
-      <View style={{ height: 60, backgroundColor: '#eee', justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Saolo</Text>
-      </View>
-
-      <Slot />
-    </View>
+    <SocketProvider>
+        <Slot />
+    </SocketProvider>
   );
 }

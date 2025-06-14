@@ -1,15 +1,22 @@
+import axios from 'axios';
 import { useFonts } from 'expo-font';
-import { LinearGradient } from 'expo-linear-gradient';
 import { Slot } from 'expo-router';
-import { Dimensions, Platform, ScrollView } from 'react-native';
+import { Platform, ScrollView } from 'react-native';
 import { AuthProvider } from '../context/AuthContext';
 import "../global.css";
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = "https://sayloapp.com/api"
 export default function RootLayout() {
   const [loaded] = useFonts({
-    SFPro: require('../assets/fonts/SFPRODISPLAYREGULAR.ttf'),
-    SFProMedium: require('../assets/fonts/SFPRODISPLAYMEDIUM.ttf'),
-    SFProSemiBold: require('../assets/fonts/SFPRODISPLAYSEMIBOLD.ttf'),
     SFProBold: require('../assets/fonts/SFPRODISPLAYBOLD.ttf'),
+    SFProSemiBold: require('../assets/fonts/SFPRODISPLAYSEMIBOLD.ttf'),
+    SFProMedium: require('../assets/fonts/SFPRODISPLAYMEDIUM.ttf'),
+    SFPro: require('../assets/fonts/SFPRODISPLAYREGULAR.ttf'),
+    
+    SFProRoundedBold: require('../assets/fonts/SFPROROUNDEDBOLD.ttf'),
+    SFProRoundedSemiBold: require('../assets/fonts/SFPROROUNDEDSEMIBOLD.ttf'),
+    SFProRoundedMedium: require('../assets/fonts/SFPROROUNDEDMEDIUM.ttf'),
+    SFProRoundedRegular: require('../assets/fonts/SFPROROUNDEDREGULAR.ttf'),
   });
   if (!loaded) {
     return null;
@@ -17,14 +24,6 @@ export default function RootLayout() {
   const platform = Platform.OS;
   return (
     <AuthProvider>
-      <LinearGradient
-        colors={['#FBF1FE', '#FFEAF5']}
-        style={{
-          flex: 1,
-          overflowY: 'auto',
-          height: Dimensions.get('window').height,
-        }}
-      >
         {
           platform == 'web' ?
             <Slot /> :
@@ -32,7 +31,6 @@ export default function RootLayout() {
               <Slot />
             </ScrollView>
         }
-      </LinearGradient>
     </AuthProvider>
   );
 }
