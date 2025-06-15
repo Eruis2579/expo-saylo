@@ -42,7 +42,7 @@ export default function Info() {
                     paddingLeft: scaleFont(16),
                     paddingRight: scaleFont(16),
                     justifyContent: 'space-between',
-                    minHeight: Dimensions.get('window').height - scaleFont(164),
+                    minHeight: Dimensions.get('window').height - scaleFont(163),
                 }}>
                     <View style={{
                         flexDirection: 'column',
@@ -119,7 +119,7 @@ export default function Info() {
                                 router.replace('/partner')
                             }).catch(err => {
                                 setWaiting(false);
-                                showToast(err?.response?.data?.message || "Server error");
+                                showToast(err?.response?.data|| "Server error");
                             })
                         }}
                         title="Next"

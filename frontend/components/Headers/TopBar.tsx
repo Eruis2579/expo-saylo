@@ -1,5 +1,4 @@
-import User from "@/assets/images/dashboard/userinfo.svg";
-import { View } from "react-native";
+import { Image, View } from "react-native";
 import { useAuth } from "../../context/AuthContext";
 export default function TopBar() {
     const { scaleFont, user } = useAuth();
@@ -27,10 +26,13 @@ export default function TopBar() {
                 shadowRadius: scaleFont(4),
                 elevation: scaleFont(5),
             }}>
-                <User style={{
-                    width: scaleFont(16),
-                    height: scaleFont(16),
-                }} />
+                <Image
+                    source={require('@/assets/images/dashboard/userinfo.png')}
+                    style={{
+                        width: scaleFont(16),
+                        height: scaleFont(16),
+                    }}
+                />
             </View>
         </View>
     )

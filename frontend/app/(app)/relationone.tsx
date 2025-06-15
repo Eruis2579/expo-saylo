@@ -28,7 +28,7 @@ export default function RelationOne() {
                 setWaiting(false);
             })
             .catch(err => {
-                showToast(err?.response?.data?.message || "Server error");
+                showToast(err?.response?.data || "Server error");
                 setWaiting(false);
             })
     }
@@ -50,7 +50,7 @@ export default function RelationOne() {
                     paddingLeft: scaleFont(16),
                     paddingRight: scaleFont(16),
                     justifyContent: 'space-between',
-                    minHeight: Dimensions.get('window').height - scaleFont(164),
+                    minHeight: Dimensions.get('window').height - scaleFont(163),
                 }}>
                     <View style={{
                         flexDirection: 'column',

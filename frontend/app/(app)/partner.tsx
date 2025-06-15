@@ -121,7 +121,7 @@ export default function Info() {
                                 setWaiting(false);
                             }).catch(err=>{
                                 setWaiting(false);
-                                showToast(err?.response?.data?.message || "Server error");
+                                showToast(err?.response?.data|| "Server error");
                             })
                         }}
                         title="Next"

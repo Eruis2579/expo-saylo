@@ -57,6 +57,7 @@ export default function GradientInput({
                     <TextInput
                         onTouchStart={onFocus}
                         onFocus={onFocus}
+                        selectionColor="#FBB9DD"
                         id={id}
                         value={value}
                         onChangeText={onChangeText}

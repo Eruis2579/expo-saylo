@@ -1,6 +1,5 @@
-import OverallIcon from '@/assets/images/dashboard/overall.svg';
 import { useAuth } from "@/context/AuthContext";
-import { Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 export default function Overall() {
     const { scaleFont } = useAuth();
     return (
@@ -29,8 +28,13 @@ export default function Overall() {
                         alignItems: "center",
                         gap: scaleFont(8),
                     }}>
-                        <OverallIcon width={scaleFont(32)}
-                            height={scaleFont(32)} />
+                        <Image
+                            source={require('@/assets/images/dashboard/overall.png')}
+                            style={{
+                                width: scaleFont(32),
+                                height: scaleFont(32),
+                            }}
+                        />
                         <Text style={{
                             fontFamily: 'SFPro',
                             fontWeight: '800',

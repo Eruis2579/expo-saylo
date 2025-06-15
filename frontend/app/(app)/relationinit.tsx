@@ -19,7 +19,7 @@ export default function RelationInit() {
                     paddingLeft: scaleFont(21),
                     paddingRight: scaleFont(21),
                     justifyContent: 'space-between',
-                    minHeight: Dimensions.get('window').height - scaleFont(164),
+                    minHeight: Dimensions.get('window').height - scaleFont(179),
                 }}>
                     <View style={{
                         flexDirection: 'column',

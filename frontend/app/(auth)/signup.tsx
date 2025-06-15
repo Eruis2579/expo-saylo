@@ -55,14 +55,19 @@ export default function Login() {
           </View>
           <View style={{
             marginTop: scaleFont(26),
-            maxWidth: scaleFont(230),
-            marginHorizontal: "auto"
+            flexDirection: 'row',
+            gap: scaleFont(7),
           }}>
+            <Image
+              style={{ width: scaleFont(41.5), height: scaleFont(15) }}
+              source={require('@/assets/images/login/arrow.png')}
+            />
             <Text style={{
               fontFamily: 'SFPro',
               fontSize: scaleFont(14),
               fontWeight: "normal",
-              color: '#181818',
+              color: '#5F5F5F',
+              maxWidth: scaleFont(230),
               lineHeight: scaleFont(16.8),
             }}>
               Experience the next level of interaction with our AI-driven chat platform.
