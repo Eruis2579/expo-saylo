@@ -9,9 +9,9 @@ export default function Overall() {
                 paddingHorizontal: scaleFont(8),
                 paddingVertical: scaleFont(10),
                 marginTop: scaleFont(18),
-                borderWidth:scaleFont(1),
-                borderColor:"#F8F8F8",
-                borderRadius:scaleFont(25)
+                borderWidth: scaleFont(1),
+                borderColor: "#F8F8F8",
+                borderRadius: scaleFont(25)
             }}>
                 <View
                     style={{
@@ -29,10 +29,8 @@ export default function Overall() {
                         alignItems: "center",
                         gap: scaleFont(8),
                     }}>
-                        <OverallIcon style={{
-                            width: scaleFont(32),
-                            height: scaleFont(32),
-                        }} />
+                        <OverallIcon width={scaleFont(32)}
+                            height={scaleFont(32)} />
                         <Text style={{
                             fontFamily: 'SFPro',
                             fontWeight: '800',
@@ -59,7 +57,7 @@ export default function Overall() {
                             justifyContent: 'flex-end',
                         }}>
                             <Text style={{
-                                
+
                                 fontFamily: "SFProMedium",
                                 fontSize: scaleFont(10),
                                 color: '#5F5F5F',
@@ -69,11 +67,11 @@ export default function Overall() {
                             </Text>
                         </View>
                         <View style={{
-                            width:scaleFont(291),
-                            borderWidth:scaleFont(4),
-                            borderColor:"#FFFFFF66",
-                            borderRadius:scaleFont(20),
-                            marginTop:scaleFont(6)
+                            width: scaleFont(291),
+                            borderWidth: scaleFont(4),
+                            borderColor: "#FFFFFF66",
+                            borderRadius: scaleFont(20),
+                            marginTop: scaleFont(6)
                         }}>
                         </View>
                     </View>

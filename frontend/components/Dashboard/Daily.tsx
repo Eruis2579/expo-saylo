@@ -6,7 +6,7 @@ export default function Daily() {
     return (
         <>
             <LinearGradient
-                colors={["#EBD2FE", "#FBB9DD"]}
+                colors={["#F9F1FE", "#FEEAF5"]}
                 start={{ x: 0.5, y: 0 }}
                 end={{ x: 0.5, y: 1 }}
                 style={{
