@@ -61,31 +61,31 @@ const ChatScreen = () => {
         style={{ flex: 1 }}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={{ flex: 1 }}>
-          <HeaderBar />
-          <FlatList
-            ref={flatListRef}
-            data={messages}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-            inverted
-            contentContainerStyle={{ padding: 12 }}
-            showsVerticalScrollIndicator={false}
-          />
-          <View style={styles.inputWrapper}>
-            <TextInput
-              style={styles.input}
-              placeholder="Type your message..."
-              value={input}
-              onChangeText={setInput}
-              onSubmitEditing={sendMessage}
+          <View style={{ flex: 1 }}>
+            <HeaderBar />
+            <FlatList
+              ref={flatListRef}
+              data={messages}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id}
+              inverted
+              contentContainerStyle={{ padding: 12 }}
+              showsVerticalScrollIndicator={false}
             />
-            <TouchableOpacity onPress={sendMessage} style={styles.sendButton}>
-              <Text style={{ color: 'white', fontWeight: 'bold' }}>Send</Text>
-            </TouchableOpacity>
+            <View style={styles.inputWrapper}>
+              <TextInput
+                style={styles.input}
+                placeholder="Type your message..."
+                value={input}
+                onChangeText={setInput}
+                onSubmitEditing={sendMessage}
+              />
+              <TouchableOpacity onPress={sendMessage} style={styles.sendButton}>
+                <Text style={{ color: 'white', fontWeight: 'bold' }}>Send</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
