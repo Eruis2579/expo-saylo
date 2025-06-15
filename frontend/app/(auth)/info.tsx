@@ -10,7 +10,7 @@ import { ConfirmButton } from "../../components/Buttons/Confirm";
 import GradientInput from "../../components/Input/GradientInput";
 import { useAuth } from "../../context/AuthContext";
 export default function Info() {
-    const { scaleFont,signIn } = useAuth();
+    const { scaleFont, signIn } = useAuth();
     const router = useRouter();
     const [date, setDate] = useState(new Date(2000, 0, 1));
     const [waiting, setWaiting] = useState(false);
@@ -26,13 +26,13 @@ export default function Info() {
         }
         if (selectedDate) setDate(selectedDate);
     };
-    const showToast = (text:string) => {
-            if (Platform.OS === 'android') {
-                ToastAndroid.show(text, ToastAndroid.SHORT);
-            }else{
-                alert(text);
-            }
-          };
+    const showToast = (text: string) => {
+        if (Platform.OS === 'android') {
+            ToastAndroid.show(text, ToastAndroid.SHORT);
+        } else {
+            alert(text);
+        }
+    };
     return (
         <>
             <MainLayout showHeader={true} showFooter={false} showbar={false}>
@@ -74,7 +74,7 @@ export default function Info() {
                                     marginTop: scaleFont(16),
                                 }}
                                 onFocus={() => {
-                                    if(!show) setShow(true)
+                                    if (!show) setShow(true)
                                 }}
                             />
                             {show && (
@@ -119,7 +119,7 @@ export default function Info() {
                                 router.replace('/partner')
                             }).catch(err => {
                                 setWaiting(false);
-                                showToast(err?.response?.data|| "Server error");
+                                showToast(err?.response?.data || "Server error");
                             })
                         }}
                         title="Next"
