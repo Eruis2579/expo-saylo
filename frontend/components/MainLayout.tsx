@@ -13,7 +13,8 @@ export default function MainLayout({
     current = 0,
     showTopBar = false,
     firstbg = "#FBF1FE",
-    secondbg = "#FFEAF5"
+    secondbg = "#FFEAF5",
+    paddingBottom=24
 }: {
     children: React.ReactNode,
     showHeader: boolean,
@@ -22,7 +23,8 @@ export default function MainLayout({
     current?: number,
     showTopBar?: boolean,
     firstbg?: string,
-    secondbg?: string
+    secondbg?: string,
+    paddingBottom?: number
 }) {
     const { scaleFont } = useAuth();
     return <>
@@ -38,7 +40,7 @@ export default function MainLayout({
                 Platform.OS === 'web' ?
                     <View style={{
                         paddingTop: scaleFont(71),
-                        paddingBottom: scaleFont(24),
+                        paddingBottom: scaleFont(paddingBottom),
                     }}>
                         <View style={{
                             minHeight: Dimensions.get('window').height - scaleFont(95),
@@ -66,7 +68,7 @@ export default function MainLayout({
 
                         <View style={{
                             paddingTop: scaleFont(71),
-                            paddingBottom: scaleFont(24),
+                            paddingBottom: scaleFont(paddingBottom),
                         }}>
                             <View style={{
                                 minHeight: Dimensions.get('window').height - scaleFont(95),

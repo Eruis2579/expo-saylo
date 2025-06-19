@@ -10,7 +10,7 @@ import { Dimensions, Pressable, Text, View } from 'react-native';
 export default function RelationOne() {
     const [selectedOption, setSelectedOption] = React.useState<string | null>(null);
     const [waiting, setWaiting] = React.useState(false);
-    const { scaleFont, user } = useAuth();
+    const { scaleFont, user,signIn } = useAuth();
     const router = useRouter();
     if ((user?.friend?.relation as any).find((item: any) => item.summary === "relationship situation")) {
         router.replace('/relationtwo');
@@ -24,6 +24,17 @@ export default function RelationOne() {
         })
             .then(res => {
                 showToast("Relationship update successful");
+                signIn({
+                    ...user,
+                    friend: {
+                        ...user?.friend,
+                        relation: [...(user?.friend?.relation || []), {
+                            summary: "relationship situation",
+                            question: "Tell me about your current relationship situation. How satisfied do you feel with this aspect of your life right now?",
+                            answer: selectedOption,
+                        }]
+                    }
+                } as any)
                 router.replace('/relationtwo');
                 setWaiting(false);
             })

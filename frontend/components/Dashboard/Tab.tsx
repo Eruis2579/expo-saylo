@@ -15,10 +15,11 @@ export default function Tab() {
                 shadowRadius: scaleFont(4),
                 elevation: scaleFont(5),
                 backgroundColor: "#FFFFFF",
-                borderRadius: scaleFont(30),
+                borderRadius: scaleFont(30)
             }}>
                 <View style={{
                     marginTop: scaleFont(9),
+                    height:scaleFont(59),
                     borderRadius: scaleFont(30),
                     flexDirection: "row",
                     gap: scaleFont(16),

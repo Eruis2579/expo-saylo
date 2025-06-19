@@ -40,10 +40,10 @@ export default function Daily() {
                     color: '#5F5F5F',
                     lineHeight: scaleFont(16.8),
                     textAlign: "center",
-                    maxWidth: scaleFont(203),
                     marginTop: scaleFont(8)
                 }}>
-                    Today, try asking an open-ended question about your partner's condition
+                    I think you’d really enjoy and get a lot out of Hold Me Tight by Dr.Sue Johnson. 
+                    It aligns well with the work we’re doing and offers powerful insight into relationship patterns and emotional connection.
                 </Text>
             </LinearGradient>
         </>

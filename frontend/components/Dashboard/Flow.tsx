@@ -5,7 +5,7 @@ export default function Flow() {
     return (
         <>
             <View style={{
-                marginTop: scaleFont(24),
+                marginTop: scaleFont(18),
                 alignItems: 'center',
                 flexDirection: 'row',
                 gap: scaleFont(15),
@@ -23,12 +23,10 @@ export default function Flow() {
                         flexDirection: "row",
                         alignItems: "center",
                         gap: scaleFont(4),
-
-
                     }}>
                         <Image
-                            style={{ width: scaleFont(24), height: scaleFont(24) }}
-                            source={require('@/assets/images/dashboard/message.png')}
+                            style={{ width: scaleFont(24), height: scaleFont(19.5) }}
+                            source={require('@/assets/images/dashboard/emotion.png')}
                         />
                         <Text style={{
                             fontFamily: "SFPro",
@@ -37,7 +35,7 @@ export default function Flow() {
                             color: "#181818",
                             maxWidth: scaleFont(85),
                         }}>
-                            Conversation  Starters
+                            Emotional Intelligence
                         </Text>
                     </View>
                     <View>

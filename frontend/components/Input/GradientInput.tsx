@@ -11,38 +11,43 @@ export default function GradientInput({
     onFocus,
     value,
     onChangeText,
+    showTitle=true,
 }: {
-    name: string;
-    placeholder: string;
-    id: string;
+    name?: string;
+    placeholder?: string;
+    id?: string;
     style?: StyleProp<ViewStyle>;
     onFocus?: () => void;
     value?: string;
     onChangeText?: (e: any) => void;
+    showTitle?: boolean;
 }) {
     const { scaleFont } = useAuth();
 
     return (
         <View style={style}>
-            <Text
-                style={{
-                    fontFamily: 'SFProMedium',
-                    fontSize: scaleFont(14),
-                    color: '#181818',
-                    lineHeight: scaleFont(22.4),
-                    paddingHorizontal: scaleFont(16),
-                }}
-            >
-                {name}
-            </Text>
-
+            {showTitle && (
+                <Text
+                    style={{
+                        fontFamily: 'SFProMedium',
+                        fontSize: scaleFont(14),
+                        color: '#181818',
+                        lineHeight: scaleFont(22.4),
+                        paddingHorizontal: scaleFont(16),
+                    }}
+                >
+                    {name}
+                </Text>
+            )}
             <LinearGradient
                 colors={['#fbd3e9', '#fdfbfb']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={
                     {
-                        marginTop: scaleFont(6),
+                        ...(
+                            showTitle?{marginTop: scaleFont(6)}:{}
+                        ),
                         borderRadius: scaleFont(10),
                         padding: scaleFont(1.5), // Border width
                     }
@@ -58,10 +63,10 @@ export default function GradientInput({
                         onTouchStart={onFocus}
                         onFocus={onFocus}
                         selectionColor="#FBB9DD"
-                        id={id}
+                        id={id||"id"}
                         value={value}
                         onChangeText={onChangeText}
-                        placeholder={placeholder}
+                        placeholder={placeholder||""}
                         placeholderTextColor="#5F5F5F"
                         style={{
                             borderRadius: scaleFont(10),

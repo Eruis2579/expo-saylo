@@ -9,11 +9,11 @@ import React from 'react';
 import { Dimensions, Pressable, Text, View } from 'react-native';
 export default function RelationThree() {
     const [selectedOption, setSelectedOption] = React.useState<string | null>(null);
-    const { scaleFont, user } = useAuth();
+    const { scaleFont, user,signIn } = useAuth();
     const router = useRouter();
     const [waiting, setWaiting] = React.useState(false);
     if ((user?.friend?.relation as any).find((item: any) => item.summary === "have kids")) {
-        router.replace('/dashboard');
+        router.replace('/qone');
     }
     const onContinue = () => {
         setWaiting(true);
@@ -23,6 +23,17 @@ export default function RelationThree() {
             answer: selectedOption,
         })
             .then(res => {
+                signIn({
+                    ...user,
+                    friend: {
+                        ...user?.friend,
+                        relation: [...(user?.friend?.relation || []), {
+                            summary: "have kids",
+                            question: "Do either of you have kids?",
+                            answer: selectedOption,
+                        }]
+                    }
+                } as any)
                 showToast("Relationship update successful");
                 router.replace('/talkai');
                 setWaiting(false);
