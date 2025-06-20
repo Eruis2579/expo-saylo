@@ -28,15 +28,10 @@ export default function MainLayout({
             style={{
                 width: Dimensions.get('window').width,
                 height: Dimensions.get('window').height,
+                flex: 1,
+                overflowY: 'auto',
             }}
         >
-            <View
-                style={{
-                    flex: 1,
-                    overflowY: 'auto',
-                    height: Dimensions.get('window').height,
-                }}
-            >
                 {
                     Platform.OS === 'web' ?
                         <View style={{
@@ -95,7 +90,6 @@ export default function MainLayout({
                             </View>
                         </ScrollView>
                 }
-            </View>
         </ImageBackground>
     </>;
 }
