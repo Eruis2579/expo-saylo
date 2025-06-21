@@ -11,7 +11,8 @@ export default function MainLayout({
     showbar = false,
     current = 0,
     showTopBar = false,
-    bg = ""
+    bg = "",
+    paddingBottom = 24,
 }: {
     children: React.ReactNode,
     showHeader: boolean,
@@ -19,7 +20,8 @@ export default function MainLayout({
     showbar?: boolean,
     current?: number,
     showTopBar?: boolean,
-    bg?: string
+    bg?: string,
+    paddingBottom?: number,
 }) {
     const { scaleFont } = useAuth();
     return <>
@@ -36,10 +38,10 @@ export default function MainLayout({
                     Platform.OS === 'web' ?
                         <View style={{
                             paddingTop: scaleFont(71),
-                            paddingBottom: scaleFont(24),
+                            paddingBottom: scaleFont(paddingBottom),
                         }}>
                             <View style={{
-                                minHeight: Dimensions.get('window').height - scaleFont(95),
+                                minHeight: Dimensions.get('window').height - scaleFont(71 + paddingBottom),
                             }}>
                                 {
                                     showHeader && <View style={{
@@ -63,10 +65,10 @@ export default function MainLayout({
                         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                             <View style={{
                                 paddingTop: scaleFont(71),
-                                paddingBottom: scaleFont(24),
+                                paddingBottom: scaleFont(paddingBottom),
                             }}>
                                 <View style={{
-                                    minHeight: Dimensions.get('window').height - scaleFont(95),
+                                    minHeight: Dimensions.get('window').height - scaleFont(71 + paddingBottom),
                                 }}>
 
                                     {

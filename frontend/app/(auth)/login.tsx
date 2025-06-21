@@ -44,7 +44,7 @@ export default function Oauth() {
                 redirectUri: REDIRECT_URI,
                 codeVerifier: request?.codeVerifier,
             }).then(res => {
-                signIn(res.data);
+                signIn({...res.data, authType:"signin"});
                 router.replace('/partner');
             }).catch(err => {
                 showToast("User not found");
@@ -61,7 +61,7 @@ export default function Oauth() {
     ]
     const onGoogleOauth = () => {
         const url = "http://sayloapp.com:18081/api/auth/google";
-        if (Platform.OS === 'web') {
+        if (process.env.NODE_ENV === 'development' || Platform.OS === 'web') {
             axios.post("/auth/google/signin").then(res => {
                 router.replace('/partner');
                 signIn(res.data);

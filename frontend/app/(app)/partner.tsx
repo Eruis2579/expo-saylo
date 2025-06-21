@@ -3,14 +3,14 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { Button, KeyboardAvoidingView, Modal, Platform, Text, ToastAndroid, View } from "react-native";
 import { ConfirmButton } from "../../components/Buttons/Confirm";
 import GradientInput from "../../components/Input/GradientInput";
 import { useAuth } from "../../context/AuthContext";
 export default function Info() {
-    const { scaleFont, user,signIn } = useAuth();
+    const { scaleFont, user, signIn } = useAuth();
     const router = useRouter();
     const [date, setDate] = useState(new Date(2000, 0, 1));
     const [waiting, setWaiting] = useState(false);
@@ -19,9 +19,11 @@ export default function Info() {
         pfirstName: '',
         pbirthday: '',
     })
-    if (user?.friend?.realname && user?.friend?.birthday) {
-        router.replace('/relationone')
-    }
+    useEffect(() => {
+        if (user?.friend?.realname && user?.friend?.birthday) {
+            router.replace('/relationone')
+        }
+    }, [user])
     const onChange = (event: any, selectedDate?: Date) => {
         if (Platform.OS === 'android') {
             if (selectedDate) setDate(selectedDate);

@@ -1,28 +1,38 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { Dimensions } from 'react-native';
-type AuthContextType = {
-  user: {
+type UserType = {
+  realname: string,
+  gender: string,
+  birthday: string,
+  email: string,
+  friend: {
     realname: string,
     gender: string,
     birthday: string,
-    email: string,
-    friend: {
-      realname: string,
-      gender: string,
-      birthday: string,
-      relation: [{
-        summary:string,
-        question:string,
-        answer:string
-      }]
-    },
-    self:[{
-      summary:string,
-      question:string,
-      answer:string
+    relation: [{
+      summary: string,
+      question: string,
+      answer: string
     }]
-  } | null;
-  signIn: (user: { realname: string, gender: string, birthday: string, email: string, friend: { realname: string, gender: string, birthday: string, relation: [{summary:string,question:string,answer:string}] },self:[{summary:string,question:string,answer:string}] }) => void;
+  },
+  self: [{
+    summary: string,
+    question: string,
+    answer: string
+  }],
+  pairs: [{
+    user: {
+      realname: String,
+      birthday: String,
+      email: String
+    },
+    paid: number
+  }],
+  authType: String | null
+}
+type AuthContextType = {
+  user: UserType | null;
+  signIn: (user: UserType) => void;
   signOut: () => void;
   scaleFont: (size: number) => number;
 };
@@ -30,9 +40,9 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<{ realname: string, gender: string, birthday: string, email: string, friend: { realname: string, gender: string, birthday: string, relation: [{summary:string,question:string,answer:string}] },self:[{summary:string,question:string,answer:string}] } | null>(null);
+  const [user, setUser] = useState<UserType | null>(null);
 
-  const signIn = (user: { realname: string, gender: string, birthday: string, email: string, friend: { realname: string, gender: string, birthday: string, relation: [{summary:string,question:string,answer:string}] },self:[{summary:string,question:string,answer:string}] }) => setUser(user);
+  const signIn = (user: UserType) => setUser(user);
   const signOut = () => setUser(null);
   const [screenWidth, setScreenWidth] = useState(Dimensions.get('window').width);
 

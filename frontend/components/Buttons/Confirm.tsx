@@ -35,7 +35,9 @@ export function ConfirmButton({ title, style, onClick, waiting = false }: { titl
                         waiting ? (
                             <Image
                                 source={require('@/assets/images/waiting.gif')}
-                                style={{ width: 24, height: 24 }}
+                                style={{ 
+                                    width: scaleFont(48), 
+                                    height: scaleFont(48) }}
                             />
                         ) : (
                             <Text style={{

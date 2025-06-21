@@ -11,19 +11,19 @@ export default function Dashboard() {
     const { scaleFont, user } = useAuth();
     return (
         <>
-            <MainLayout showHeader={true} showFooter={false} showbar={false} showTopBar={true} current={0} firstbg="#FFFFFF" secondbg="#FFFFFF" paddingBottom={10}>
+            <MainLayout showHeader={true} showFooter={false} showbar={false} showTopBar={true} current={0} firstbg="#FFFFFF" secondbg="#FFFFFF" paddingBottom={31}>
                 <Name />
                 <View style={{
                     justifyContent:"space-between",
                     paddingHorizontal: scaleFont(16),
-                    minHeight:Dimensions.get('window').height - scaleFont(175.6),
+                    minHeight:Dimensions.get('window').height - scaleFont(196.6),
                 }}>
                     <View>
                         <Daily />
                         <Overall />
                         <Flow />
                     </View>
-                    <Tab />
+                    <Tab current={0} />
                 </View>
             </MainLayout >
         </>

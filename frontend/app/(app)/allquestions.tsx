@@ -73,7 +73,7 @@ export default function Allquestions() {
                         </View>
                     </View>
                     <ConfirmButton
-                        onClick={() => router.replace('/dashboard')}
+                        onClick={() => router.replace("/pairing" as any)}
                         title="Continue"
                         style={{
                             marginTop: scaleFont(24),

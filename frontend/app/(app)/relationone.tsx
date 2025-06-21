@@ -5,16 +5,18 @@ import { showToast } from '@/utils/showToast';
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Dimensions, Pressable, Text, View } from 'react-native';
 export default function RelationOne() {
     const [selectedOption, setSelectedOption] = React.useState<string | null>(null);
     const [waiting, setWaiting] = React.useState(false);
-    const { scaleFont, user,signIn } = useAuth();
+    const { scaleFont, user, signIn } = useAuth();
     const router = useRouter();
-    if ((user?.friend?.relation as any).find((item: any) => item.summary === "relationship situation")) {
-        router.replace('/relationtwo');
-    }
+    useEffect(() => {
+        if ((user?.friend?.relation as any).find((item: any) => item.summary === "relationship situation")) {
+            router.replace('/relationtwo');
+        }
+    }, [user])
     const onContinue = () => {
         setWaiting(true);
         axios.put('/auth/addRelation', {
@@ -45,12 +47,12 @@ export default function RelationOne() {
     }
 
     const options = [
-        {title:'Single', px:scaleFont(28.5), py:scaleFont(16)},
-        {title:'In a relationship', px:scaleFont(18.5), py:scaleFont(16)},
-        {title:"Engaged", px:scaleFont(25.5), py:scaleFont(16)},
-        {title:'In a civil partnership', px:scaleFont(16), py:scaleFont(16)},
-        {title:'Married', px:scaleFont(16), py:scaleFont(16)},
-        {title:"It's complicated", px:scaleFont(16), py:scaleFont(16)},
+        { title: 'Single', px: scaleFont(28.5), py: scaleFont(16) },
+        { title: 'In a relationship', px: scaleFont(18.5), py: scaleFont(16) },
+        { title: "Engaged", px: scaleFont(25.5), py: scaleFont(16) },
+        { title: 'In a civil partnership', px: scaleFont(16), py: scaleFont(16) },
+        { title: 'Married', px: scaleFont(16), py: scaleFont(16) },
+        { title: "It's complicated", px: scaleFont(16), py: scaleFont(16) },
     ];
     return (
         <>
@@ -94,8 +96,8 @@ export default function RelationOne() {
                                         start={{ x: 0.5, y: 0 }}   // middle top
                                         end={{ x: 0.5, y: 1 }}     // middle bottom
                                         style={{
-                                            paddingHorizontal:option.px,
-                                            paddingVertical:option.py,
+                                            paddingHorizontal: option.px,
+                                            paddingVertical: option.py,
                                             borderRadius: scaleFont(15),
                                         }}
                                     >

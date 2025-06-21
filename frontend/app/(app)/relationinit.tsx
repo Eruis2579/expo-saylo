@@ -5,7 +5,7 @@ import { useRouter } from 'expo-router';
 import React from 'react';
 import { Dimensions, Image, Text, View } from 'react-native';
 export default function RelationInit() {
-    const { scaleFont,user } = useAuth();
+    const { scaleFont } = useAuth();
     const router = useRouter();
     const onContinue = () => {
         router.replace('/relationone');

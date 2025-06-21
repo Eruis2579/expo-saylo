@@ -1,10 +1,11 @@
+import { LoginFooter } from "@/components/Footers/LoginFooter";
+import { Bar } from "@/components/Headers/Bar";
+import { LoginHeader } from "@/components/Headers/LoginHeader";
+import TopBar from "@/components/Headers/TopBar";
 import { useAuth } from "@/context/AuthContext";
 import { LinearGradient } from "expo-linear-gradient";
 import { Dimensions, Platform, ScrollView, View } from "react-native";
-import { LoginFooter } from "./Footers/LoginFooter";
-import { Bar } from "./Headers/Bar";
-import { LoginHeader } from "./Headers/LoginHeader";
-import TopBar from "./Headers/TopBar";
+import { SkipButton } from "./Buttons/Skip";
 export default function MainLayout({
     children,
     showHeader = true,
@@ -14,7 +15,9 @@ export default function MainLayout({
     showTopBar = false,
     firstbg = "#FBF1FE",
     secondbg = "#FFEAF5",
-    paddingBottom=24
+    paddingBottom=24,
+    showSkip = false,
+    onSkip = () => {},
 }: {
     children: React.ReactNode,
     showHeader: boolean,
@@ -24,7 +27,9 @@ export default function MainLayout({
     showTopBar?: boolean,
     firstbg?: string,
     secondbg?: string,
-    paddingBottom?: number
+    paddingBottom?: number,
+    showSkip?:boolean   ,
+    onSkip?: () => void
 }) {
     const { scaleFont } = useAuth();
     return <>
@@ -43,7 +48,7 @@ export default function MainLayout({
                         paddingBottom: scaleFont(paddingBottom),
                     }}>
                         <View style={{
-                            minHeight: Dimensions.get('window').height - scaleFont(95),
+                            minHeight: Dimensions.get('window').height - scaleFont(71+paddingBottom),
                         }}>
                             {
                                 showHeader && <View style={{
@@ -56,6 +61,7 @@ export default function MainLayout({
                                     <LoginHeader />
                                     {showbar && <Bar current={current} />}
                                     {showTopBar && <TopBar />}
+                                    {showSkip&&<SkipButton onchange={onSkip} />}
                                 </View>
                             }
                             {children}
@@ -71,7 +77,7 @@ export default function MainLayout({
                             paddingBottom: scaleFont(paddingBottom),
                         }}>
                             <View style={{
-                                minHeight: Dimensions.get('window').height - scaleFont(95),
+                                minHeight: Dimensions.get('window').height - scaleFont(71+paddingBottom),
                             }}>
 
                                 {
@@ -85,6 +91,7 @@ export default function MainLayout({
                                         <LoginHeader />
                                         {showbar && <Bar current={current} />}
                                         {showTopBar && <TopBar />}
+                                        {showSkip&&<SkipButton onchange={onSkip} />}
                                     </View>
                                 }
                                 {children}

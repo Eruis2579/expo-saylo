@@ -75,7 +75,11 @@ export default function Qone() {
                 3: nextMessage?.summary || "",
             })
         } else {
-            router.replace('/allquestions');
+            if(messageList[3]==="support"){
+                router.replace('/allquestions');
+            }else{
+                router.replace('/pairing' as any);
+            }
         }
     }, [user])
     const onCancelFunc = {
@@ -84,7 +88,7 @@ export default function Qone() {
         2: () => { setScreenStatus({ mainStatus: 0, confirmStatus: 0, messageStatus: 0, contentStatus: 0 }) },
     }
     useEffect(() => {
-        if (messageList[2].trim().length > 0) {
+        if (screenStatus.mainStatus === 2 && messageList[2].trim().length > 0) {
             if (screenStatus.confirmStatus !== 2) {
                 setScreenStatus({ ...screenStatus, confirmStatus: 2 })
             }

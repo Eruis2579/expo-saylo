@@ -117,7 +117,7 @@ export default function Info() {
                                     birthday: dayjs(date).format('D MMMM YYYY'),
                                 }).then(res => {
                                     showToast("Signup Success");
-                                    signIn(res.data);
+                                    signIn({...res.data, authType:"signup"});
                                     setWaiting(false);
                                     router.replace('/partner')
                                 }).catch(err => {

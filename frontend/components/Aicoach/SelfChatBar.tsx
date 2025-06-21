@@ -6,7 +6,7 @@ import * as FileSystem from 'expo-file-system';
 import { useRef, useState } from "react";
 import { Image, Pressable, View } from "react-native";
 
-export default function Bar({
+export default function SelfChatBar({
     mainStatus = 0,
     confirmStatus = 0,
     showCancel = true,
@@ -19,7 +19,7 @@ export default function Bar({
 }: {
     mainStatus: number,
     confirmStatus: number,
-    showCancel?: boolean,
+    showCancel: boolean,
     setScreenStatus: (status: { mainStatus: number; confirmStatus: number; messageStatus: number; contentStatus: number; }) => void,
     onCancel: () => void,
     setMessageList: (messageList: { 0: string; 1: string; 2: string; 3: string }) => void,
@@ -31,7 +31,13 @@ export default function Bar({
     const [textHover, setTextHover] = useState(false);
     const cancelButton = {
         icon: require('@/assets/images/aicoach/back.png'),
-        onPress: onCancel,
+        onPress: async () => {
+            const recording = recordingRef.current;
+            if (!recording) return;
+
+            await recording.stopAndUnloadAsync();
+            onCancel();
+        },
         onTouchStart: () => { },
         onTouchEnd: () => { },
         width: scaleFont(24),
@@ -79,7 +85,7 @@ export default function Bar({
     const confirmButtons = [
         {
             icon: textHover ? require('@/assets/images/aicoach/text_hover.png') : require('@/assets/images/aicoach/text_init.png'),
-            onPress: () => setScreenStatus({ mainStatus: 2, confirmStatus: 1, messageStatus: 0, contentStatus: 3 }),
+            onPress: () => setScreenStatus({ mainStatus: 2, confirmStatus: 1, messageStatus: 3, contentStatus: 3 }),
             onTouchStart: () => setTextHover(true),
             onTouchEnd: () => setTextHover(false),
             width: scaleFont(24),
@@ -105,16 +111,15 @@ export default function Bar({
                     const audioData = await FileSystem.readAsStringAsync(uri, {
                         encoding: FileSystem.EncodingType.Base64,
                     });
-                    axios.post('/coach/transcribe', {
+                    axios.post('/coach/self/audio', {
                         audioData,
                     })
                         .then((res) => {
-                            showToast(res.data);
                             setMessageList({
                                 ...messageList,
                                 [2]: res.data,
                             })
-                            setScreenStatus({ mainStatus: 0, confirmStatus: 3, messageStatus: 2, contentStatus: 2 })
+                            setScreenStatus({ mainStatus: 0, confirmStatus: 0, messageStatus: 2, contentStatus: 2 })
                         })
                         .catch((error) => {
                             showToast(error.response.data);
@@ -145,12 +150,12 @@ export default function Bar({
             borderRadius: scaleFont(50),
             borderWidth: scaleFont(1),
             borderColor: "#F8F8F8",
-            width:scaleFont(236),
-            height:scaleFont(78),
+            width: scaleFont(236),
+            height: scaleFont(78),
             alignItems: 'center',
-            justifyContent:"center",
+            justifyContent: "center",
             flexDirection: 'row',
-            ...(showCancel ? {gap: scaleFont(35)} : {gap: scaleFont(48)}),
+            ...(showCancel ? { gap: scaleFont(35) } : { gap: scaleFont(48) }),
         }}>
             {[
                 ...(showCancel ? [cancelButton] : []),

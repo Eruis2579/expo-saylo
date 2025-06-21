@@ -5,16 +5,18 @@ import { showToast } from '@/utils/showToast';
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Dimensions, Pressable, Text, View } from 'react-native';
 export default function RelationThree() {
     const [selectedOption, setSelectedOption] = React.useState<string | null>(null);
     const { scaleFont, user,signIn } = useAuth();
     const router = useRouter();
     const [waiting, setWaiting] = React.useState(false);
+    useEffect(() => {   
     if ((user?.friend?.relation as any).find((item: any) => item.summary === "have kids")) {
         router.replace('/qone');
     }
+    }, [user])
     const onContinue = () => {
         setWaiting(true);
         axios.put('/auth/addRelation', {
