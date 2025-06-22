@@ -15,6 +15,8 @@ export default function Bar({
     setMessageList,
     onConfirm,
     messageList,
+    waiting,
+    setWaiting,
 
 }: {
     mainStatus: number,
@@ -25,13 +27,21 @@ export default function Bar({
     setMessageList: (messageList: { 0: string; 1: string; 2: string; 3: string }) => void,
     onConfirm: () => void,
     messageList: { 0: string; 1: string; 2: string; 3: string },
+    waiting: boolean,
+    setWaiting: (waiting: boolean) => void,
 }) {
     const recordingRef = useRef<Audio.Recording | null>(null);
     const { scaleFont } = useAuth();
     const [textHover, setTextHover] = useState(false);
     const cancelButton = {
         icon: require('@/assets/images/aicoach/back.png'),
-        onPress: onCancel,
+        onPress: async () => {
+            const recording = recordingRef.current;
+            if (!recording) return;
+
+            await recording.stopAndUnloadAsync();
+            onCancel();
+        },
         onTouchStart: () => { },
         onTouchEnd: () => { },
         width: scaleFont(24),
@@ -94,11 +104,15 @@ export default function Bar({
             height: scaleFont(24),
         },
         {
-            icon: require('@/assets/images/aicoach/complete.png'),
+            icon: waiting ? require('@/assets/images/aicoach/complete.png') : require('@/assets/images/waiting.gif'),
             onPress: async () => {
                 if (mainStatus === 1) {
+                    setWaiting(true);
                     const recording = recordingRef.current;
-                    if (!recording) return;
+                    if (!recording) {
+                        setWaiting(false);
+                        return;
+                    }
 
                     await recording.stopAndUnloadAsync();
                     const uri = recording.getURI() as any; // File URI on device
@@ -115,9 +129,11 @@ export default function Bar({
                                 [2]: res.data,
                             })
                             setScreenStatus({ mainStatus: 0, confirmStatus: 3, messageStatus: 2, contentStatus: 2 })
+                            setWaiting(false);
                         })
                         .catch((error) => {
                             showToast(error.response.data);
+                            setWaiting(false);
                         })
                 } else {
                     onConfirm();
@@ -141,16 +157,17 @@ export default function Bar({
     ];
     return (
         <View style={{
+            marginTop: scaleFont(92),
             backgroundColor: '#FFFFFF80',
             borderRadius: scaleFont(50),
             borderWidth: scaleFont(1),
             borderColor: "#F8F8F8",
-            width:scaleFont(236),
-            height:scaleFont(78),
+            width: scaleFont(236),
+            height: scaleFont(78),
             alignItems: 'center',
-            justifyContent:"center",
+            justifyContent: "center",
             flexDirection: 'row',
-            ...(showCancel ? {gap: scaleFont(35)} : {gap: scaleFont(48)}),
+            ...(showCancel ? { gap: scaleFont(35) } : { gap: scaleFont(48) }),
         }}>
             {[
                 ...(showCancel ? [cancelButton] : []),

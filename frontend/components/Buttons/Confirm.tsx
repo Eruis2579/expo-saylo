@@ -16,7 +16,8 @@ export function ConfirmButton({ title, style, onClick, waiting = false }: { titl
                     {
                         flexDirection: 'row',
                         alignItems: 'center',
-                        marginHorizontal: "auto"
+                        marginHorizontal: "auto",
+                        gap:scaleFont(5)
                     },
                     style
                 ]}

@@ -11,9 +11,8 @@ export default function Notify() {
     const { scaleFont } = useAuth();
     const router = useRouter();
     const onSkip = () => {
-        router.replace('/aicoach' as any);
-        // router.replace('/payment' as any);
         storage.set('notification', false);
+        router.replace('/payment' as any);
     };
     return (
         <>

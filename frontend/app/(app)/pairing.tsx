@@ -66,7 +66,7 @@ export default function Pairing() {
     };
     useEffect(()=>{
         if((user?.pairs?.filter(v=>v.paid)||[]).length>0){
-            router.replace('/dashboard' as any);
+            router.replace('/payment' as any);
         }
     },[])
     useEffect(() => {

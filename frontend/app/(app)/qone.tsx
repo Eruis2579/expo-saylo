@@ -54,10 +54,7 @@ export default function Qone() {
         messageStatus: 0,
         contentStatus: 0,
     })
-    // const currentMessage = questionList.find(v => !user?.self?.find(s => s.summary === v.summary));
-    // if (!currentMessage) {
-    //     router.replace('/dashboard');
-    // }
+    const [waiting, setWaiting] = useState(false);
     const [messageList, setMessageList] = useState({
         0: "",
         1: "You're talking now...",
@@ -99,6 +96,7 @@ export default function Qone() {
         }
     }, [messageList])
     const onConfirm = () => {
+        setWaiting(true);
         axios.put('/coach/register/self', {
             summary: messageList[3],
             question: messageList[0],
@@ -114,9 +112,11 @@ export default function Qone() {
                     }]
                 } as any)
                 showToast("Answer is successfully saved");
+                setWaiting(false);
             })
             .catch(err => {
                 showToast(err?.response?.data || "Server error");
+                setWaiting(false);
             })
     }
     return (
@@ -172,6 +172,8 @@ export default function Qone() {
                             setMessageList={setMessageList}
                             messageList={messageList}
                             onConfirm={onConfirm}
+                            waiting={waiting}
+                            setWaiting={setWaiting}
                         />
                     </View>
                 </KeyboardAvoidingView>

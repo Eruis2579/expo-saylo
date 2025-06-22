@@ -146,6 +146,7 @@ export default function SelfChatBar({
     ];
     return (
         <View style={{
+            marginTop: scaleFont(92),
             backgroundColor: '#FFFFFF80',
             borderRadius: scaleFont(50),
             borderWidth: scaleFont(1),

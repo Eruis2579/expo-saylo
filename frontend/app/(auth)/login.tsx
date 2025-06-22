@@ -61,7 +61,7 @@ export default function Oauth() {
     ]
     const onGoogleOauth = () => {
         const url = "http://sayloapp.com:18081/api/auth/google";
-        if (Platform.OS === 'web') {
+        if (process.env.NODE_ENV === 'development' || Platform.OS === 'web') {
             axios.post("/auth/google/signin").then(res => {
                 router.replace('/partner');
                 signIn(res.data);

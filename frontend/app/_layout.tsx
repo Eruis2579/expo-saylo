@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useFonts } from 'expo-font';
 import { Slot } from 'expo-router';
+import React from 'react';
 import { AuthProvider } from '../context/AuthContext';
 import "../global.css";
 axios.defaults.withCredentials = true;
@@ -11,7 +12,7 @@ export default function RootLayout() {
     SFProSemiBold: require('../assets/fonts/SFPRODISPLAYSEMIBOLD.ttf'),
     SFProMedium: require('../assets/fonts/SFPRODISPLAYMEDIUM.ttf'),
     SFPro: require('../assets/fonts/SFPRODISPLAYREGULAR.ttf'),
-    
+
     SFProRoundedBold: require('../assets/fonts/SFPROROUNDEDBOLD.ttf'),
     SFProRoundedSemiBold: require('../assets/fonts/SFPROROUNDEDSEMIBOLD.ttf'),
     SFProRoundedMedium: require('../assets/fonts/SFPROROUNDEDMEDIUM.ttf'),
@@ -21,9 +22,10 @@ export default function RootLayout() {
     return null;
   }
   return (
-    <AuthProvider>
+    
+      <AuthProvider>
         <Slot />
-    </AuthProvider>
+      </AuthProvider>
   );
 }
 
