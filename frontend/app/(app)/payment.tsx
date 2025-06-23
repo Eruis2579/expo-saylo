@@ -3,16 +3,20 @@ import SelectGradient from '@/components/Input/SelectGradient';
 import MainLayout from '@/components/MainLayout';
 import { useAuth } from "@/context/AuthContext";
 import { showToast } from '@/utils/showToast';
-import { StripeProvider, useStripe } from '@stripe/stripe-react-native';
+import {
+    initPaymentSheet,
+    presentPaymentSheet,
+    StripeProvider,
+} from '@stripe/stripe-react-native';
 import axios from 'axios';
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { Animated, Pressable, Text, View } from "react-native";
 function Payment() {
     const { scaleFont } = useAuth();
-    const { initGooglePay, isGooglePaySupported, presentGooglePay } = useStripe();
+    const [clientSecret, setClientSecret] = useState(null);
     const [enabled, setEnabled] = useState(true);
     const [waiting, setWaiting] = useState(false);
     const [period, setPeriod] = useState("")
@@ -21,20 +25,6 @@ function Payment() {
     const onSkip = () => {
         router.replace('/dashboard' as any);
     };
-
-    useEffect(() => {
-        initGooglePay({
-            testEnv: true,
-            merchantName: "Saylo",
-            countryCode: "US",
-            billingAddressConfig: {
-                format: "FULL",
-                isPhoneNumberRequired: true,
-                isRequired: false,
-            },
-            existingPaymentMethodRequired: false,
-        });
-    }, []);
 
     const toggleSwitch = () => {
         const toValue = enabled ? 0 : 20;
@@ -48,34 +38,38 @@ function Payment() {
     const openStripeSheet = async () => {
         try {
             setWaiting(true);
-            // const paymentMethod = await stripe.createPaymentMethod({
-            //     paymentMethodType: 'Card',
-            // });
-            // if (paymentMethod.error) {
-            //     throw paymentMethod.error;
-            // }
-            // Step 1: Get PaymentSheet params from your backend
-            const response = await axios.get('/stripe/create-subscription-intent', {
+            const res = await axios.get('/stripe/create-subscription-intent', {
                 params: {
                     plan: period,       // "Yearly" or "Monthly"
                     trial: enabled,      // true/false
                     // payment_method: paymentMethod.paymentMethod.id
                 }
+            })
+            const { clientSecret } = res.data;
+            setClientSecret(clientSecret);
+
+            const { error: initError } = await initPaymentSheet({
+                merchantDisplayName: 'Saylo',
+                paymentIntentClientSecret: clientSecret,
+                googlePay: {
+                    merchantCountryCode: 'US',
+                    currencyCode: 'USD',
+                    testEnv: true, // set false for production
+                },
             });
 
-            const {
-                clientSecret
-            } = response.data;
-            showToast("ok");
+            if (initError) {
+                console.error(initError);
+                showToast(initError.message);
+            }
 
-            const { error } = await presentGooglePay({
-                clientSecret,
-                currencyCode: "USD", // display only
-            });
-            if (error) {
-                console.error("GPay error", error);
+            const { error: presentError } = await presentPaymentSheet();
+            if (presentError) {
+                console.error("GPay error", presentError);
+                showToast(presentError.message);
             } else {
-                console.log("Subscription setup confirmed");
+                showToast("Subscription setup confirmed");
+                router.replace('/dashboard' as any);
             }
             // Step 2: Init PaymentSheet
             // const { error: initError } = await initPaymentSheet({
