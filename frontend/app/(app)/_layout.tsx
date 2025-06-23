@@ -15,7 +15,7 @@ export default function AppLayout() {
     if (isMount) {
       if (!user) {
         // If not logged in, redirect to login page in (auth)
-        router.replace('/signup');
+        router.replace('/splash');
       }
     }
   }, [user, isMount]);

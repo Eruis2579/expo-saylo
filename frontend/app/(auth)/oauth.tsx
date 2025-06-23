@@ -2,6 +2,7 @@ import { LoginButton } from '@/components/Buttons/Login';
 import { OauthButton } from '@/components/Buttons/Oauth';
 import MainLayout from '@/components/MainLayout';
 import { useAuth } from '@/context/AuthContext';
+import { useWaiting } from '@/context/WaitingContext';
 import axios from 'axios';
 import * as AuthSession from 'expo-auth-session';
 import { router } from 'expo-router';
@@ -18,7 +19,9 @@ const discovery = {
 };
 
 export default function Oauth() {
+
     const { scaleFont } = useAuth();
+    const { waiting, setWaiting, delWaiting }: any = useWaiting();
     const [request, result, promptAsync] = AuthSession.useAuthRequest(
         {
             clientId: CLIENT_ID,
@@ -32,12 +35,13 @@ export default function Oauth() {
     const showToast = (text: string) => {
         if (Platform.OS === 'android') {
             ToastAndroid.show(text, ToastAndroid.SHORT);
-        }else{
+        } else {
             alert(text);
         }
     };
     useEffect(() => {
         if (result?.type === 'success') {
+            setWaiting("global");
             const { code } = result.params;
 
             axios.post('/auth/google/presignup', {
@@ -48,9 +52,11 @@ export default function Oauth() {
                 withCredentials: true
             }).then(res => {
                 router.replace('/welcome');
+                delWaiting("global")
             }).catch(err => {
                 showToast("User already exist");
                 console.error('Error exchanging token:', err);
+                delWaiting("global")
             });
         }
     }, [result]);
@@ -64,12 +70,15 @@ export default function Oauth() {
     const onGoogleOauth = () => {
         const url = "http://sayloapp.com:18081/api/auth/google";
         if (process.env.NODE_ENV === 'development' || Platform.OS === 'web') {
+            setWaiting("global");
             axios.post('/auth/google/presignup', {})
                 .then(res => {
                     router.replace('/welcome');
+                    delWaiting("global")
                 }).catch(err => {
                     showToast("User already exist");
                     console.error('Error exchanging token:', err);
+                    delWaiting("global")
                 });
         } else {
             promptAsync();

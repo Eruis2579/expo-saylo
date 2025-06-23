@@ -32,10 +32,12 @@ export default function SelfChatBar({
     const cancelButton = {
         icon: require('@/assets/images/aicoach/back.png'),
         onPress: async () => {
-            const recording = recordingRef.current;
-            if (!recording) return;
+            if(mainStatus===1){
+                const recording = recordingRef.current;
+                if (!recording) return;
 
-            await recording.stopAndUnloadAsync();
+                await recording.stopAndUnloadAsync();
+            }
             onCancel();
         },
         onTouchStart: () => { },
@@ -93,9 +95,21 @@ export default function SelfChatBar({
         },
         {
             icon: require('@/assets/images/aicoach/switch_voice.png'),
-            onPress: () => setScreenStatus({ mainStatus: 1, confirmStatus: 2, messageStatus: 1, contentStatus: 2 }),
             onTouchStart: () => { },
             onTouchEnd: () => { },
+            onPress: async () => {
+                const permission = await Audio.requestPermissionsAsync();
+                if (!permission.granted) {
+                    showToast("Permission denied");
+                    return;
+                }
+                await Audio.setAudioModeAsync({ allowsRecordingIOS: true, playsInSilentModeIOS: true });
+                const { recording } = await Audio.Recording.createAsync(
+                    Audio.RecordingOptionsPresets.HIGH_QUALITY
+                );
+                recordingRef.current = recording;
+                setScreenStatus({ mainStatus: 1, confirmStatus: 2, messageStatus: 1, contentStatus: 2 })
+            },
             width: scaleFont(24),
             height: scaleFont(24),
         },
@@ -146,7 +160,6 @@ export default function SelfChatBar({
     ];
     return (
         <View style={{
-            marginTop: scaleFont(92),
             backgroundColor: '#FFFFFF80',
             borderRadius: scaleFont(50),
             borderWidth: scaleFont(1),

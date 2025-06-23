@@ -72,9 +72,9 @@ export default function Qone() {
                 3: nextMessage?.summary || "",
             })
         } else {
-            if(messageList[3]==="support"){
+            if (messageList[3] === "support") {
                 router.replace('/allquestions');
-            }else{
+            } else {
                 router.replace('/pairing' as any);
             }
         }
@@ -85,15 +85,18 @@ export default function Qone() {
         2: () => { setScreenStatus({ mainStatus: 0, confirmStatus: 0, messageStatus: 0, contentStatus: 0 }) },
     }
     useEffect(() => {
-        if (screenStatus.mainStatus === 2 && messageList[2].trim().length > 0) {
-            if (screenStatus.confirmStatus !== 2) {
-                setScreenStatus({ ...screenStatus, confirmStatus: 2 })
+        setScreenStatus(screenStatus => {
+            if (screenStatus.mainStatus === 2 && messageList[2].trim().length > 0) {
+                if (screenStatus.confirmStatus !== 2) {
+                    return { ...screenStatus, confirmStatus: 2 }
+                }
+            } else {
+                if (screenStatus.confirmStatus === 2) {
+                    return { ...screenStatus, confirmStatus: 1 }
+                }
             }
-        } else {
-            if (screenStatus.confirmStatus === 2) {
-                setScreenStatus({ ...screenStatus, confirmStatus: 1 })
-            }
-        }
+            return screenStatus;
+        })
     }, [messageList])
     const onConfirm = () => {
         setWaiting(true);
@@ -121,14 +124,14 @@ export default function Qone() {
     }
     return (
         <>
-            <MainLayout2 showHeader={true} showFooter={false} showbar={false} showTopBar={false} current={0} bg="aicoach.png">
+            <MainLayout2 showHeader={true} showFooter={false} showbar={false} showTopBar={false} paddingBottom={39} current={0} bg="aicoach.png">
                 <KeyboardAvoidingView
                     style={{ flex: 1 }}
                     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                     keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 90} // adjust this if needed
                 >
                     <View style={{
-                        marginTop: scaleFont(48),
+                        marginTop: scaleFont(51),
                         paddingHorizontal: scaleFont(16),
                         flex: 1,
                         justifyContent: 'space-between',

@@ -18,7 +18,6 @@
     "@react-navigation/bottom-tabs": "^7.3.10",
     "@react-navigation/elements": "^2.3.8",
     "@react-navigation/native": "^7.1.6",
-    "@stripe/stripe-react-native": "0.45.0",
     "axios": "^1.9.0",
     "dayjs": "^1.11.13",
     "expo": "~53.0.10",
@@ -35,6 +34,7 @@
     "expo-linking": "~7.1.5",
     "expo-random": "^14.0.1",
     "expo-router": "~5.0.7",
+    "expo-secure-store": "~14.2.3",
     "expo-sensors": "^14.1.4",
     "expo-splash-screen": "~0.30.9",
     "expo-status-bar": "~2.2.3",
@@ -64,7 +64,7 @@
     "react-native-web": "~0.20.0",
     "react-native-webview": "13.13.5",
     "socket.io-client": "^4.4.1",
-    "expo-secure-store": "~14.2.3"
+    "@stripe/stripe-react-native": "0.27.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

@@ -1,5 +1,5 @@
-import ContentList from "@/components/Aicoach/ContentList";
 import SelfChatBar from "@/components/Aicoach/SelfChatBar";
+import SelfContentList from "@/components/Aicoach/SelfContentList";
 import Tab from "@/components/Dashboard/Tab";
 import MainLayout2 from "@/components/MainLayout2";
 import { useAuth } from "@/context/AuthContext";
@@ -85,7 +85,7 @@ export default function Qone() {
                                     Hey {user?.realname || "Sarah"},
                                 </Text>
                                 <Text style={{
-                                    marginTop: scaleFont(16),
+                                    marginTop: scaleFont(8),
                                     fontFamily: 'SFProMedium',
                                     fontSize: screenStatus.messageStatus === 2 ? scaleFont(18) : scaleFont(32),
                                     color: '#181818',
@@ -95,7 +95,7 @@ export default function Qone() {
                                     {messageList[screenStatus.messageStatus as keyof typeof messageList]}
                                 </Text>
                             </View>
-                            <ContentList current={screenStatus.contentStatus} textData={messageList[0]} setTextData={(text) => { setMessageList({ ...messageList, [0]: text }) }} />
+                            <SelfContentList current={screenStatus.contentStatus} textData={messageList[0]} setTextData={(text) => { setMessageList({ ...messageList, [0]: text }) }} />
                         </View>
                         <View style={{
                             alignItems: "center"

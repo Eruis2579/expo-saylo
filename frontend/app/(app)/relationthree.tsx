@@ -9,13 +9,13 @@ import React, { useEffect } from 'react';
 import { Dimensions, Pressable, Text, View } from 'react-native';
 export default function RelationThree() {
     const [selectedOption, setSelectedOption] = React.useState<string | null>(null);
-    const { scaleFont, user,signIn } = useAuth();
+    const { scaleFont, user, signIn } = useAuth();
     const router = useRouter();
     const [waiting, setWaiting] = React.useState(false);
-    useEffect(() => {   
-    if ((user?.friend?.relation as any).find((item: any) => item.summary === "have kids")) {
-        router.replace('/qone');
-    }
+    useEffect(() => {
+        if ((user?.friend?.relation as any).find((item: any) => item.summary === "have kids")) {
+            router.replace('/talkai');
+        }
     }, [user])
     const onContinue = () => {
         setWaiting(true);
@@ -25,6 +25,7 @@ export default function RelationThree() {
             answer: selectedOption,
         })
             .then(res => {
+                router.replace('/talkai');
                 signIn({
                     ...user,
                     friend: {
@@ -37,11 +38,10 @@ export default function RelationThree() {
                     }
                 } as any)
                 showToast("Relationship update successful");
-                router.replace('/talkai');
                 setWaiting(false);
             })
             .catch(err => {
-                showToast(err?.response?.data|| "Server error");
+                showToast(err?.response?.data || "Server error");
                 setWaiting(false);
             })
     }

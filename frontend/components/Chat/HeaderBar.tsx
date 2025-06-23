@@ -1,9 +1,19 @@
+import dayjs from "dayjs";
 import { router } from "expo-router";
+import { useEffect, useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import { useAuth } from "../../context/AuthContext";
-
-export default function HeaderBar() {
-    const { scaleFont,user } = useAuth();
+export default function HeaderBar({ partnerOnline, partnerLastOnlineAt }: { partnerOnline: boolean, partnerLastOnlineAt: any }) {
+    const { scaleFont, user } = useAuth();
+    const [lastOnlineAt, setLastOnlineAt] = useState("");
+    const setLastOnlineAtString = () => {
+        setLastOnlineAt(partnerLastOnlineAt ? "(" + dayjs().diff(dayjs(partnerLastOnlineAt), 'minutes') + " minutes ago)" : "");
+    }
+    useEffect(() => {
+        setLastOnlineAtString();
+        const id = setInterval(setLastOnlineAtString, 60000);
+        return () => clearInterval(id);
+    }, [partnerLastOnlineAt])
     return (
         <View style={{
             flexDirection: 'row',
@@ -41,12 +51,24 @@ export default function HeaderBar() {
                     />
                 </View>
             </Pressable>
-            <Text style={{
-                fontFamily: 'SFProSemiBold',
-                fontSize: scaleFont(18),
-                color: '#181818',
-                textTransform: 'uppercase',
-            }}>{user?.friend?.realname}</Text>
+            <View style={{
+                flexDirection: 'row',
+                alignItems: 'flex-end',
+                gap: scaleFont(2),
+            }}>
+                <Text style={{
+                    fontFamily: 'SFProSemiBold',
+                    fontSize: scaleFont(18),
+                    color: '#181818',
+                    textTransform: 'uppercase',
+                }}>{user?.friend?.realname}</Text>
+                <Text style={{
+                    fontFamily: 'SFProSemiBold',
+                    fontSize: scaleFont(12),
+                    color: '#181818',
+                    textTransform: 'uppercase',
+                }}>{partnerOnline ? "online" : lastOnlineAt}</Text>
+            </View>
             <View style={{
                 flexDirection: 'row',
                 alignItems: 'center',

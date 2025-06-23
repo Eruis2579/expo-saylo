@@ -34,8 +34,35 @@ export default function MainLayout({
                 overflowY: 'auto',
             }}
         >
-                {
-                    Platform.OS === 'web' ?
+            {
+                Platform.OS === 'web' ?
+                    <View style={{
+                        paddingTop: scaleFont(71),
+                        paddingBottom: scaleFont(paddingBottom),
+                    }}>
+                        <View style={{
+                            minHeight: Dimensions.get('window').height - scaleFont(71 + paddingBottom),
+                        }}>
+                            {
+                                showHeader && <View style={{
+                                    paddingHorizontal: scaleFont(16),
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+
+                                }}>
+                                    <LoginHeader />
+                                    {showbar && <Bar current={current} />}
+                                    {showTopBar && <TopBar />}
+                                </View>
+                            }
+                            {children}
+                            {
+                                showFooter && <LoginFooter />
+                            }
+                        </View>
+                    </View> :
+                    <ScrollView contentContainerStyle={{ flex: 1, height: Dimensions.get('window').height }}>
                         <View style={{
                             paddingTop: scaleFont(71),
                             paddingBottom: scaleFont(paddingBottom),
@@ -43,6 +70,7 @@ export default function MainLayout({
                             <View style={{
                                 minHeight: Dimensions.get('window').height - scaleFont(71 + paddingBottom),
                             }}>
+
                                 {
                                     showHeader && <View style={{
                                         paddingHorizontal: scaleFont(16),
@@ -61,37 +89,9 @@ export default function MainLayout({
                                     showFooter && <LoginFooter />
                                 }
                             </View>
-                        </View> :
-                        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                            <View style={{
-                                paddingTop: scaleFont(71),
-                                paddingBottom: scaleFont(paddingBottom),
-                            }}>
-                                <View style={{
-                                    minHeight: Dimensions.get('window').height - scaleFont(71 + paddingBottom),
-                                }}>
-
-                                    {
-                                        showHeader && <View style={{
-                                            paddingHorizontal: scaleFont(16),
-                                            flexDirection: 'row',
-                                            alignItems: 'center',
-                                            justifyContent: 'space-between',
-
-                                        }}>
-                                            <LoginHeader />
-                                            {showbar && <Bar current={current} />}
-                                            {showTopBar && <TopBar />}
-                                        </View>
-                                    }
-                                    {children}
-                                    {
-                                        showFooter && <LoginFooter />
-                                    }
-                                </View>
-                            </View>
-                        </ScrollView>
-                }
+                        </View>
+                    </ScrollView>
+            }
         </ImageBackground>
     </>;
 }

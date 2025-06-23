@@ -120,6 +120,7 @@ export default function Notify() {
                             onClick={() => {
                                 storage.set('notification', true);
                                 showToast("Notification successfully enabled.");
+                                router.replace("/payment" as any)
                             }}
                             title="Yes"
                             style={{

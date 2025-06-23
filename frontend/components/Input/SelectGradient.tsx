@@ -23,7 +23,7 @@ export default function ({ children, showGradient = true,style }: { children: Re
                         {children}
                     </LinearGradient>
                 ) : (
-                    <View style={style}>
+                    <View style={{padding: scaleFont(1),...style as any}}>
                         {children}
                     </View>
                 )

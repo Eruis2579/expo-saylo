@@ -97,14 +97,26 @@ export default function Bar({
         },
         {
             icon: require('@/assets/images/aicoach/switch_voice.png'),
-            onPress: () => setScreenStatus({ mainStatus: 1, confirmStatus: 2, messageStatus: 1, contentStatus: 2 }),
+            onPress: async() => {
+                const permission = await Audio.requestPermissionsAsync();
+                if (!permission.granted) {
+                    showToast("Permission denied");
+                    return;
+                }
+                await Audio.setAudioModeAsync({ allowsRecordingIOS: true, playsInSilentModeIOS: true });
+                const { recording } = await Audio.Recording.createAsync(
+                    Audio.RecordingOptionsPresets.HIGH_QUALITY
+                );
+                recordingRef.current = recording;
+                setScreenStatus({ mainStatus: 1, confirmStatus: 2, messageStatus: 1, contentStatus: 2 })
+            },
             onTouchStart: () => { },
             onTouchEnd: () => { },
             width: scaleFont(24),
             height: scaleFont(24),
         },
         {
-            icon: waiting ? require('@/assets/images/aicoach/complete.png') : require('@/assets/images/waiting.gif'),
+            icon: !waiting ? require('@/assets/images/aicoach/complete.png') : require('@/assets/images/waiting.gif'),
             onPress: async () => {
                 if (mainStatus === 1) {
                     setWaiting(true);
@@ -157,7 +169,6 @@ export default function Bar({
     ];
     return (
         <View style={{
-            marginTop: scaleFont(92),
             backgroundColor: '#FFFFFF80',
             borderRadius: scaleFont(50),
             borderWidth: scaleFont(1),

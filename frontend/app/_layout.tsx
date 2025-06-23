@@ -1,3 +1,6 @@
+import { AppStateProvider } from '@/context/AppStateContext';
+import { SplashProvider } from '@/context/SplashContext';
+import { WaitingProvider } from '@/context/WaitingContext';
 import axios from 'axios';
 import { useFonts } from 'expo-font';
 import { Slot } from 'expo-router';
@@ -22,10 +25,15 @@ export default function RootLayout() {
     return null;
   }
   return (
-    
-      <AuthProvider>
-        <Slot />
-      </AuthProvider>
+    <AppStateProvider>
+      <SplashProvider>
+        <AuthProvider>
+          <WaitingProvider>
+            <Slot />
+          </WaitingProvider>
+        </AuthProvider>
+      </SplashProvider>
+    </AppStateProvider>
   );
 }
 
