@@ -2,6 +2,7 @@ import Bar from "@/components/Aicoach/Bar";
 import ContentList from "@/components/Aicoach/ContentList";
 import MainLayout2 from "@/components/MainLayout2";
 import { useAuth } from "@/context/AuthContext";
+import { storage } from "@/utils/localstorage";
 import { showToast } from "@/utils/showToast";
 import axios from "axios";
 import { router } from "expo-router";
@@ -54,6 +55,14 @@ export default function Qone() {
         messageStatus: 0,
         contentStatus: 0,
     })
+    useEffect(() => {
+        async function checkPopup() {
+            if (await storage.get('qonepop') !== true) {
+                router.replace('/qonepop' as any)
+            }
+        }
+        checkPopup()
+    }, [])
     const [waiting, setWaiting] = useState(false);
     const [messageList, setMessageList] = useState({
         0: "",
@@ -157,9 +166,9 @@ export default function Qone() {
                                 <Text style={{
                                     marginTop: scaleFont(16),
                                     fontFamily: 'SFProMedium',
-                                    fontSize: screenStatus.messageStatus === 2 ? scaleFont(24) : (messageList[3] === "Your relationship" ? scaleFont(32) : scaleFont(18)),
+                                    fontSize: screenStatus.messageStatus === 2 ? scaleFont(24) : (messageList[3] === "your relationship" ? scaleFont(32) : scaleFont(18)),
                                     color: '#181818',
-                                    lineHeight: screenStatus.messageStatus === 2 ? scaleFont(28.8) : (messageList[3] === "Your relationship" ? scaleFont(38.4) : scaleFont(21.6)),
+                                    lineHeight: screenStatus.messageStatus === 2 ? scaleFont(28.8) : (messageList[3] === "your relationship" ? scaleFont(38.4) : scaleFont(21.6)),
                                     textAlign: "center"
                                 }}>
                                     {messageList[screenStatus.messageStatus as keyof typeof messageList]}

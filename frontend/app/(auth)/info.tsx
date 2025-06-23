@@ -36,7 +36,7 @@ export default function Info() {
     };
     return (
         <>
-            <MainLayout showHeader={true} showFooter={false} showbar={false}>
+            <MainLayout showHeader={true} showFooter={false} showbar={false} paddingBottom={45}>
                 <KeyboardAvoidingView
                     style={{ flex: 1 }}
                     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

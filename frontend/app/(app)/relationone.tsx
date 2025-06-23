@@ -7,7 +7,7 @@ import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import React, { useEffect } from 'react';
-import { Dimensions, Pressable, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 export default function RelationOne() {
     const [selectedOption, setSelectedOption] = React.useState<string | null>(null);
     const { setWaiting, delWaiting } = useWaiting();
@@ -57,14 +57,14 @@ export default function RelationOne() {
     ];
     return (
         <>
-            <MainLayout showHeader={true} showFooter={false} showbar={false}>
+            <MainLayout showHeader={true} showFooter={false} showbar={false} paddingBottom={45}>
                 <View style={{
                     marginTop: scaleFont(32),
                     flexDirection: 'column',
                     paddingLeft: scaleFont(16),
                     paddingRight: scaleFont(16),
                     justifyContent: 'space-between',
-                    minHeight: Dimensions.get('window').height - scaleFont(163),
+                    flex:1
                 }}>
                     <View style={{
                         flexDirection: 'column',
