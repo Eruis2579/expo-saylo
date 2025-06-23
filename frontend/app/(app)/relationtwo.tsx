@@ -1,6 +1,7 @@
 import { ConfirmButton } from '@/components/Buttons/Confirm';
 import MainLayout from '@/components/MainLayout';
 import { useAuth } from '@/context/AuthContext';
+import { useWaiting } from '@/context/WaitingContext';
 import { showToast } from '@/utils/showToast';
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -9,7 +10,7 @@ import React, { useEffect } from 'react';
 import { Dimensions, Pressable, Text, View } from 'react-native';
 export default function RelationTwo() {
     const [selectedOption, setSelectedOption] = React.useState<string | null>(null);
-    const [waiting, setWaiting] = React.useState(false);
+    const {delWaiting, setWaiting} = useWaiting();
     const { scaleFont, user,signIn } = useAuth();
     const router = useRouter();
     useEffect(() => {
@@ -18,7 +19,7 @@ export default function RelationTwo() {
         }
     }, [user])
     const onContinue = () => {
-        setWaiting(true);
+        setWaiting("global");
         axios.put('/auth/addRelation', {
             summary: "live together",
             question: "Do you live together?",
@@ -38,11 +39,11 @@ export default function RelationTwo() {
                 } as any)
                 showToast("Relationship update successful");
                 router.replace('/relationthree');
-                setWaiting(false);
+                delWaiting("global");
             })
             .catch(err => {
                 showToast(err?.response?.data || "Server error");
-                setWaiting(false);
+                delWaiting("global");
             })
     }
 
@@ -109,7 +110,6 @@ export default function RelationTwo() {
                     <ConfirmButton
                         onClick={onContinue}
                         title="Next"
-                        waiting={waiting}
                         style={{
                             marginTop: scaleFont(24),
                             gap: scaleFont(5)

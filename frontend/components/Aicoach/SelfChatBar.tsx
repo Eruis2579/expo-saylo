@@ -1,4 +1,5 @@
 import { useAuth } from "@/context/AuthContext";
+import { useWaiting } from "@/context/WaitingContext";
 import { showToast } from "@/utils/showToast";
 import axios from "axios";
 import { Audio } from 'expo-av';
@@ -29,6 +30,7 @@ export default function SelfChatBar({
     const recordingRef = useRef<Audio.Recording | null>(null);
     const { scaleFont } = useAuth();
     const [textHover, setTextHover] = useState(false);
+    const {setWaiting, delWaiting} = useWaiting();
     const cancelButton = {
         icon: require('@/assets/images/aicoach/back.png'),
         onPress: async () => {
@@ -125,10 +127,12 @@ export default function SelfChatBar({
                     const audioData = await FileSystem.readAsStringAsync(uri, {
                         encoding: FileSystem.EncodingType.Base64,
                     });
+                    setWaiting("global");
                     axios.post('/coach/self/audio', {
                         audioData,
                     })
                         .then((res) => {
+                            delWaiting("global");
                             setMessageList({
                                 ...messageList,
                                 [2]: res.data,
@@ -136,6 +140,7 @@ export default function SelfChatBar({
                             setScreenStatus({ mainStatus: 0, confirmStatus: 0, messageStatus: 2, contentStatus: 2 })
                         })
                         .catch((error) => {
+                            delWaiting("global");
                             showToast(error.response.data);
                         })
                 } else {

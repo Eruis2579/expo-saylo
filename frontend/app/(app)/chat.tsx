@@ -194,7 +194,7 @@ const ChatScreen = () => {
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              gap: scaleFont(5),
+              gap: scaleFont(8),
               alignSelf: 'flex-end',
               marginTop: scaleFont(4),
             }}
@@ -210,7 +210,7 @@ const ChatScreen = () => {
               source={item.isReaded ? require('@/assets/images/chat/read.png') : require('@/assets/images/chat/notread.png')}
               style={{
                 width: scaleFont(15),
-                height: scaleFont(15),
+                height: scaleFont(10),
               }}
             />}
           </View>

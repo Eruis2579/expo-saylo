@@ -5,10 +5,22 @@ import Overall from '@/components/Dashboard/Overall';
 import Tab from '@/components/Dashboard/Tab';
 import MainLayout from '@/components/MainLayout';
 import { useAuth } from '@/context/AuthContext';
-import React from 'react';
+import { storage } from '@/utils/localstorage';
+import { showToast } from '@/utils/showToast';
+import { router } from 'expo-router';
+import React, { useEffect } from 'react';
 import { Dimensions, View } from 'react-native';
 export default function Dashboard() {
     const { scaleFont, user } = useAuth();
+    useEffect(()=>{
+        async function checkPopup(){
+            showToast(await storage.get('dashboardpop') as string)
+            if(await storage.get('dashboardpop')===true){
+                router.replace('/dashboardpopup' as any)
+            }
+        }
+        checkPopup()
+    },[])
     return (
         <>
             <MainLayout showHeader={true} showFooter={false} showbar={false} showTopBar={true} current={0} firstbg="#FFFFFF" secondbg="#FFFFFF" paddingBottom={31}>

@@ -2,10 +2,11 @@ import { LoginButton } from '@/components/Buttons/Login';
 import { OauthButton } from '@/components/Buttons/Oauth';
 import MainLayout from '@/components/MainLayout';
 import { useAuth } from '@/context/AuthContext';
+import { useWaiting } from '@/context/WaitingContext';
 import axios from 'axios';
 import * as AuthSession from 'expo-auth-session';
 import { router, useRouter } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Image, Platform, Text, ToastAndroid, View } from 'react-native';
 const CLIENT_ID = '581399054116-uo6cbeieehqhk44t250f87td1u5cnmhi.apps.googleusercontent.com';
 const REDIRECT_URI = AuthSession.makeRedirectUri({
@@ -18,7 +19,7 @@ const discovery = {
 
 export default function Oauth() {
     const { scaleFont, signIn } = useAuth();
-    const [waiting, setWaiting] = useState(false);      
+    const { setWaiting, delWaiting, waiting } = useWaiting();
     const [request, result, promptAsync] = AuthSession.useAuthRequest(
         {
             clientId: CLIENT_ID,
@@ -32,25 +33,24 @@ export default function Oauth() {
     const showToast = (text: string) => {
         if (Platform.OS === 'android') {
             ToastAndroid.show(text, ToastAndroid.SHORT);
-        }else{
+        } else {
             alert(text);
         }
     };
     useEffect(() => {
         if (result?.type === 'success') {
-            setWaiting(true);
             const { code } = result.params;
-
+            setWaiting("global");
             axios.post('/auth/google/signin', {
                 code,
                 redirectUri: REDIRECT_URI,
                 codeVerifier: request?.codeVerifier,
             }).then(res => {
-                setWaiting(false);
-                signIn({...res.data, authType:"signin"});
+                delWaiting("global");
+                signIn({ ...res.data, authType: "signin" });
                 router.replace('/partner');
             }).catch(err => {
-                setWaiting(false);
+                delWaiting("global");
                 showToast("User not found");
                 console.error('Error exchanging token:', err);
             });
@@ -66,10 +66,13 @@ export default function Oauth() {
     const onGoogleOauth = () => {
         const url = "http://sayloapp.com:18081/api/auth/google";
         if (process.env.NODE_ENV === 'development' || Platform.OS === 'web') {
+            setWaiting("global");
             axios.post("/auth/google/signin").then(res => {
+                delWaiting("global");
                 router.replace('/partner');
                 signIn(res.data);
             }).catch(err => {
+                delWaiting("global");
                 showToast("User not found");
                 console.error('Error exchanging token:', err);
             });
@@ -129,8 +132,8 @@ export default function Oauth() {
                         marginHorizontal: "auto",
                         gap: scaleFont(16)
                     }}>
-                        <OauthButton waiting={waiting} title="Log in Using Google Account" icon="google" onClick={() => onGoogleOauth()} />
-                        <OauthButton waiting={waiting} title="Log in Using Apple Account" icon="apple" onClick={onGoogleOauth} />
+                        <OauthButton title="Log in Using Google Account" icon="google" onClick={() => onGoogleOauth()} />
+                        <OauthButton title="Log in Using Apple Account" icon="apple" onClick={onGoogleOauth} />
                     </View>
                 </View>
             </MainLayout>

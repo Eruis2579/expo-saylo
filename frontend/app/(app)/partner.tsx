@@ -1,4 +1,5 @@
 import MainLayout from '@/components/MainLayout';
+import { useWaiting } from '@/context/WaitingContext';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from 'axios';
 import dayjs from 'dayjs';
@@ -13,7 +14,7 @@ export default function Info() {
     const { scaleFont, user, signIn } = useAuth();
     const router = useRouter();
     const [date, setDate] = useState(new Date(2000, 0, 1));
-    const [waiting, setWaiting] = useState(false);
+    const { setWaiting, delWaiting } = useWaiting();
     const [show, setShow] = useState(false);
     const [data, setData] = useState({
         pfirstName: '',
@@ -116,9 +117,8 @@ export default function Info() {
                             </View>
                         </View>
                         <ConfirmButton
-                            waiting={waiting}
                             onClick={() => {
-                                setWaiting(true);
+                                setWaiting("global");
                                 axios.put('/auth/updateFriend', {
                                     realname: data.pfirstName,
                                     birthday: dayjs(date).format('D MMMM YYYY'),
@@ -133,9 +133,9 @@ export default function Info() {
                                     } as any)
                                     showToast("Update Success");
                                     router.replace('/relationinit');
-                                    setWaiting(false);
+                                    delWaiting("global");
                                 }).catch(err => {
-                                    setWaiting(false);
+                                    delWaiting("global");
                                     showToast(err?.response?.data || "Server error");
                                 })
                             }}

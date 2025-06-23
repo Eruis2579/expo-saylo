@@ -1,4 +1,5 @@
 import MainLayout from '@/components/MainLayout';
+import { useWaiting } from '@/context/WaitingContext';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from 'axios';
 import dayjs from 'dayjs';
@@ -13,7 +14,7 @@ export default function Info() {
     const { scaleFont, signIn } = useAuth();
     const router = useRouter();
     const [date, setDate] = useState(new Date(2000, 0, 1));
-    const [waiting, setWaiting] = useState(false);
+    const { waiting, setWaiting, delWaiting } = useWaiting();
     const [show, setShow] = useState(false);
     const [data, setData] = useState({
         firstName: '',
@@ -109,19 +110,18 @@ export default function Info() {
                         </View>
 
                         <ConfirmButton
-                            waiting={waiting}
                             onClick={() => {
-                                setWaiting(true);
+                                setWaiting("global");
                                 axios.post('/auth/google/signup', {
                                     realname: data.firstName,
                                     birthday: dayjs(date).format('D MMMM YYYY'),
                                 }).then(res => {
                                     showToast("Signup Success");
-                                    signIn({...res.data, authType:"signup"});
-                                    setWaiting(false);
+                                    signIn({ ...res.data, authType: "signup" });
+                                    delWaiting("global");
                                     router.replace('/partner')
                                 }).catch(err => {
-                                    setWaiting(false);
+                                    delWaiting("global");
                                     showToast(err?.response?.data || "Server error");
                                 })
                             }}

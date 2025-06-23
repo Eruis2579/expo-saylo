@@ -3,7 +3,7 @@ import MainLayout from '@/components/MainLayout';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { Dimensions, Image, Text, View } from 'react-native';
+import { Image, Text, View } from 'react-native';
 export default function talkAi() {
     const { scaleFont,user } = useAuth();
     const router = useRouter();
@@ -12,14 +12,14 @@ export default function talkAi() {
     }
     return (
         <>
-            <MainLayout showHeader={true} showFooter={false} showbar={false}>
+            <MainLayout showHeader={true} showFooter={false} showbar={false} paddingBottom={45}>
                 <View style={{
                     marginTop: scaleFont(48),
                     flexDirection: 'column',
                     paddingLeft: scaleFont(21),
                     paddingRight: scaleFont(21),
                     justifyContent: 'space-between',
-                    minHeight: Dimensions.get('window').height - scaleFont(179),
+                    flex:1
                 }}>
                     <View style={{
                         flexDirection: 'column',

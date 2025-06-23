@@ -1,6 +1,7 @@
 import { ConfirmButton } from '@/components/Buttons/Confirm';
 import MainLayout from '@/components/MainLayout';
 import { useAuth } from '@/context/AuthContext';
+import { useWaiting } from '@/context/WaitingContext';
 import { showToast } from '@/utils/showToast';
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -11,14 +12,14 @@ export default function RelationThree() {
     const [selectedOption, setSelectedOption] = React.useState<string | null>(null);
     const { scaleFont, user, signIn } = useAuth();
     const router = useRouter();
-    const [waiting, setWaiting] = React.useState(false);
+    const {setWaiting, delWaiting} = useWaiting();
     useEffect(() => {
         if ((user?.friend?.relation as any).find((item: any) => item.summary === "have kids")) {
-            router.replace('/talkai');
+            router.replace('/qone');
         }
-    }, [user])
+    }, [])
     const onContinue = () => {
-        setWaiting(true);
+        setWaiting("global");
         axios.put('/auth/addRelation', {
             summary: "have kids",
             question: "Do either of you have kids?",
@@ -38,11 +39,11 @@ export default function RelationThree() {
                     }
                 } as any)
                 showToast("Relationship update successful");
-                setWaiting(false);
+                delWaiting("global");
             })
             .catch(err => {
                 showToast(err?.response?.data || "Server error");
-                setWaiting(false);
+                delWaiting("global");
             })
     }
 
@@ -117,7 +118,6 @@ export default function RelationThree() {
                         </View>
                     </View>
                     <ConfirmButton
-                        waiting={waiting}
                         onClick={onContinue}
                         title="Next"
                         style={{

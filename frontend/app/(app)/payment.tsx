@@ -19,7 +19,7 @@ function Payment() {
     const translateX = useState(new Animated.Value(enabled ? 20 : 0))[0];
     const router = useRouter();
     const onSkip = () => {
-        router.replace('/dashboardpopup' as any);
+        router.replace('/dashboard' as any);
     };
 
     useEffect(() => {
@@ -327,7 +327,8 @@ function Payment() {
                             waiting={waiting}
                             title={enabled ? "Start your 7-day free trial" : "Next"}
                             onClick={() => {
-                                openStripeSheet();
+                                if (period) openStripeSheet();
+                                else showToast("Please select a plan");
                             }} />
                         <Text style={{
                             fontFamily: "SFProMedium",

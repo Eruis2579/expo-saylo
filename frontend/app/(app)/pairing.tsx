@@ -8,7 +8,7 @@ import { Dimensions, Image, Platform, Pressable, Text, View } from "react-native
 import { ConfirmButton } from "../../components/Buttons/Confirm";
 import { useAuth } from "../../context/AuthContext";
 import { useSocket } from "../../context/SocketContext";
-const SHAKE_THRESHOLD = 1.7;
+const SHAKE_THRESHOLD = 1.5;
 export default function Pairing() {
     const { scaleFont, signIn,user } = useAuth();
     const { socket } = useSocket();

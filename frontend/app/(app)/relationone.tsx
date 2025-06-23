@@ -1,6 +1,7 @@
 import { ConfirmButton } from '@/components/Buttons/Confirm';
 import MainLayout from '@/components/MainLayout';
 import { useAuth } from '@/context/AuthContext';
+import { useWaiting } from '@/context/WaitingContext';
 import { showToast } from '@/utils/showToast';
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -9,7 +10,7 @@ import React, { useEffect } from 'react';
 import { Dimensions, Pressable, Text, View } from 'react-native';
 export default function RelationOne() {
     const [selectedOption, setSelectedOption] = React.useState<string | null>(null);
-    const [waiting, setWaiting] = React.useState(false);
+    const { setWaiting, delWaiting } = useWaiting();
     const { scaleFont, user, signIn } = useAuth();
     const router = useRouter();
     useEffect(() => {
@@ -18,7 +19,7 @@ export default function RelationOne() {
         }
     }, [user])
     const onContinue = () => {
-        setWaiting(true);
+        setWaiting("global");
         axios.put('/auth/addRelation', {
             summary: "relationship situation",
             question: "Tell me about your current relationship situation. How satisfied do you feel with this aspect of your life right now?",
@@ -38,11 +39,11 @@ export default function RelationOne() {
                     }
                 } as any)
                 router.replace('/relationtwo');
-                setWaiting(false);
+                delWaiting("global");
             })
             .catch(err => {
                 showToast(err?.response?.data || "Server error");
-                setWaiting(false);
+                delWaiting("global");
             })
     }
 
@@ -112,7 +113,6 @@ export default function RelationOne() {
                         </View>
                     </View>
                     <ConfirmButton
-                        waiting={waiting}
                         onClick={onContinue}
                         title="Next"
                         style={{

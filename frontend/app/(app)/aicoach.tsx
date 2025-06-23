@@ -3,6 +3,7 @@ import SelfContentList from "@/components/Aicoach/SelfContentList";
 import Tab from "@/components/Dashboard/Tab";
 import MainLayout2 from "@/components/MainLayout2";
 import { useAuth } from "@/context/AuthContext";
+import { useWaiting } from "@/context/WaitingContext";
 import { showToast } from "@/utils/showToast";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -16,6 +17,7 @@ export default function Qone() {
         messageStatus: 0,
         contentStatus: 0,
     })
+    const {setWaiting, delWaiting} = useWaiting();
     const [messageList, setMessageList] = useState({
         0: "",
         1: "Let's talk",
@@ -37,10 +39,12 @@ export default function Qone() {
         }
     }, [messageList])
     const onConfirm = () => {
+        setWaiting("global");
         axios.post('/coach/self/chat', {
             content: messageList[0],
         })
             .then(res => {
+                delWaiting("global");
                 setMessageList({
                     ...messageList,
                     [0]:"",
@@ -49,6 +53,7 @@ export default function Qone() {
                 setScreenStatus({ mainStatus: 0, confirmStatus: 0, messageStatus: 2, contentStatus: 2 })
             })
             .catch(err => {
+                delWaiting("global");
                 showToast(err?.response?.data || "Server error");
             })
     }
@@ -58,7 +63,7 @@ export default function Qone() {
                 <KeyboardAvoidingView
                     style={{ flex: 1 }}
                     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                    keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 90} // adjust this if needed
+                    keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0} // adjust this if needed
                 >
                     <View style={{
                         marginTop: scaleFont(48),

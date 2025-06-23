@@ -36,10 +36,12 @@ export default function Bar({
     const cancelButton = {
         icon: require('@/assets/images/aicoach/back.png'),
         onPress: async () => {
-            const recording = recordingRef.current;
-            if (!recording) return;
+            if (mainStatus === 1) {
+                const recording = recordingRef.current;
+                if (!recording) return;
 
-            await recording.stopAndUnloadAsync();
+                await recording.stopAndUnloadAsync();
+            }
             onCancel();
         },
         onTouchStart: () => { },
@@ -97,7 +99,7 @@ export default function Bar({
         },
         {
             icon: require('@/assets/images/aicoach/switch_voice.png'),
-            onPress: async() => {
+            onPress: async () => {
                 const permission = await Audio.requestPermissionsAsync();
                 if (!permission.granted) {
                     showToast("Permission denied");

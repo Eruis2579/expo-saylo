@@ -10,6 +10,7 @@ import Tab from '@/components/Dashboard/Tab';
 import TabPopup from '@/components/Dashboard/TabPopup';
 import MainLayout from '@/components/MainLayout';
 import { useAuth } from '@/context/AuthContext';
+import { storage } from '@/utils/localstorage';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { Dimensions, Image, Pressable, Text, View } from 'react-native';
@@ -112,7 +113,10 @@ export default function DashboardPopup() {
                             lineHeight: scaleFont(19.2),
                             color: "#181818"
                         }}>{steps[showPopupStep].title}</Text>
-                        <Pressable onPress={() => router.replace("/dashboard")}>
+                        <Pressable onPress={() => {
+                            storage.set('dashboardpop', true);
+                            router.replace("/dashboard")
+                            }}>
                             <Image source={require('@/assets/images/dashboard/cancel.png')} style={{
                                 width: scaleFont(20),
                                 height: scaleFont(20),
@@ -158,6 +162,7 @@ export default function DashboardPopup() {
                         <PopupButton onPress={() => {
                             if(showPopupStep===3){
                                 router.replace("/dashboard");
+                                storage.set('dashboardpop', true);
                             }else{
                                 setShowPopupStep(showPopupStep+1)
                             }
