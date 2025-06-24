@@ -2,7 +2,8 @@ import React from "react";
 import { Image, Pressable, StyleProp, Text, View, ViewStyle } from "react-native";
 import { useAuth } from "../../context/AuthContext";
 import GradientButton from "./Gradient";
-export function ConfirmButton({ title, style, onClick, waiting = false }: { title: string, style?: StyleProp<ViewStyle>, onClick?: () => void, waiting?: boolean }) {
+export function ConfirmButton({ title, style, onClick, waiting = false, disabled=waiting }: 
+    { title: string, style?: StyleProp<ViewStyle>, onClick?: () => void, waiting?: boolean, disabled?: boolean }) {
     const [isHover, setIsHover] = React.useState(false);
     const { scaleFont } = useAuth();
     return (
@@ -11,7 +12,7 @@ export function ConfirmButton({ title, style, onClick, waiting = false }: { titl
                 onTouchStart={() => {!waiting&&setIsHover(true)}}
                 onTouchEnd={() => {isHover&&setIsHover(false)}}
                 onPress={onClick}
-                disabled={waiting}
+                disabled={disabled}
                 style={[
                     {
                         flexDirection: 'row',

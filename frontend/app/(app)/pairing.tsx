@@ -1,41 +1,99 @@
 import MainLayout from '@/components/MainLayout';
+import { useWaiting } from '@/context/WaitingContext';
 import { showToast } from '@/utils/showToast';
+import axios from 'axios';
 import { useRouter } from "expo-router";
 import { Accelerometer, AccelerometerMeasurement } from 'expo-sensors';
 import React, { useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
-import { Dimensions, Image, Platform, Pressable, Text, View } from "react-native";
+import { Dimensions, Image, Platform, Pressable, Share, Text, View } from "react-native";
 import { ConfirmButton } from "../../components/Buttons/Confirm";
 import { useAuth } from "../../context/AuthContext";
 import { useSocket } from "../../context/SocketContext";
 const SHAKE_THRESHOLD = 1.5;
 export default function Pairing() {
-    const { scaleFont, signIn,user } = useAuth();
+    const { scaleFont, signIn, user } = useAuth();
+    const { waiting, setWaiting, delWaiting }: any = useWaiting()
     const { socket } = useSocket();
     const [subscription, setSubscription] = useState<{
         remove: () => void;
     } | null>(null);
-    const [shakeDetected, setShakeDetected] = useState(false);
-    const _subscribe = () => {
+    useEffect(() => {
         if (socket) {
-            socket.on('pair-shake-error',(error)=>{
-                showToast(error)
-            });
-            socket.on('pair-success',(paired)=>{
+            socket.on('pair-success-with-code', (paired) => {
                 _unsubscribe();
                 showToast(`Paired with ${paired.realname} successfully!!!`)
                 signIn({
-                  ...user,
-                  pairs: [...(user?.pairs || []), {
-                    user: {
-                      realname: paired.realname,
-                      birthday: paired.birthday,
-                      email: paired.email,
-                    },
-                    paid: 0
-                  }]
+                    ...user,
+                    pairs: [...(user?.pairs || []), {
+                        user: {
+                            realname: paired.realname,
+                            birthday: paired.birthday,
+                            email: paired.email,
+                        },
+                        paid: 0
+                    }]
                 } as any)
-                setWaiting(false);
+                delWaiting('pair-code');
+                setStep(2);
+            });
+            return () => {
+                socket.removeAllListeners('pair-success-with-code');
+            }
+        }
+    }, [socket])
+    const [shakeDetected, setShakeDetected] = useState(false);
+    const onShare = async () => {
+        setWaiting('pair-code');
+        try {
+            axios.get('/pair/code')
+                .then(async (res) => {
+                    const code = res.data?.code || '';
+                    const result = await Share.share({
+                        message: `I’d like to have conversations together in Paired, an app for couples!\n\nTap here to get the app and enter my pairing code: ${code}\n\nhttps://sayloapp.com/api/pair?campaign=No%20User%20Consent&adj_t=qtnxr4y&pairing_code=${code}&adjust_deeplink_js=1&username=${user?.realname}`,
+                        title: "Saylo",
+                        url: "https://sayloapp.com",
+                    });
+
+                    if (result.action === Share.sharedAction) {
+                        if (result.activityType) {
+                            // shared with activity type
+                            showToast('Shared with activity type:' + result.activityType);
+                        } else {
+                            // shared
+                            console.log('Shared successfully');
+                        }
+                    } else if (result.action === Share.dismissedAction) {
+                        // dismissed
+                        showToast('Share dismissed');
+                    }
+                }).catch(err => {
+                    console.log(err)
+                })
+        } catch (error) {
+            console.error('Error sharing:', error as any);
+        }
+    };
+    const _subscribe = () => {
+        if (socket) {
+            socket.on('pair-shake-error', (error) => {
+                showToast(error)
+            });
+            socket.on('pair-success', (paired) => {
+                _unsubscribe();
+                showToast(`Paired with ${paired.realname} successfully!!!`)
+                signIn({
+                    ...user,
+                    pairs: [...(user?.pairs || []), {
+                        user: {
+                            realname: paired.realname,
+                            birthday: paired.birthday,
+                            email: paired.email,
+                        },
+                        paid: 0
+                    }]
+                } as any)
+                delWaiting('pair-shaking');
                 setStep(2);
             });
         }
@@ -64,13 +122,13 @@ export default function Pairing() {
             socket.removeAllListeners('pair-success');
         }
     };
-    useEffect(()=>{
-        if((user?.pairs?.filter(v=>v.paid)||[]).length>0){
+    useEffect(() => {
+        if ((user?.pairs || []).length > 0) {
             router.replace('/payment' as any);
         }
-    },[])
+    }, [])
     useEffect(() => {
-        if (subscription){
+        if (subscription) {
             return () => {
                 _unsubscribe();
             };
@@ -84,14 +142,13 @@ export default function Pairing() {
         }
     }, [shakeDetected]);
     const router = useRouter();
-    const [waiting, setWaiting] = useState(false);
     const [step, setStep] = useState(0);
 
     const onShaking = () => {
         if (step === 0) {
-            setWaiting(true);
+            setWaiting('pair-shaking');
             setStep(1);
-            if(Platform.OS!=='web'){
+            if (Platform.OS !== 'web') {
                 _subscribe();
             }
         } else if (step === 2) {
@@ -175,23 +232,25 @@ export default function Pairing() {
                         alignItems: "center"
                     }}>
                         <ConfirmButton
-                            waiting={waiting}
+                            waiting={waiting['pair-shaking']}
+                            disabled={waiting['pair-shaking'] || waiting['pair-code']}
                             onClick={onShaking}
                             title="Next"
                             style={{
                                 marginTop: scaleFont(24),
                                 gap: scaleFont(5)
                             }} />
-                        <Pressable style={{
-                            marginTop: scaleFont(16),
-                            width: scaleFont(333),
-                            height: scaleFont(38),
-                            justifyContent: "center",
-                            alignItems: "center",
-                        }}
-                            disabled={waiting}
+                        <Pressable
+                            style={{
+                                marginTop: scaleFont(16),
+                                width: scaleFont(333),
+                                height: scaleFont(38),
+                                justifyContent: "center",
+                                alignItems: "center",
+                            }}
+                            disabled={waiting['pair-shaking'] || waiting['pair-code']}
                             onPress={() => {
-                                showToast("Pair Code")
+                                onShare();
                             }}>
                             <Text style={{
                                 fontFamily: 'SFProMedium',

@@ -1,13 +1,39 @@
 import dayjs from "dayjs";
+import duration from 'dayjs/plugin/duration';
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import { useAuth } from "../../context/AuthContext";
+dayjs.extend(duration);
+export function formatTimeAgo(timestamp: any) {
+    const now = dayjs();
+    const past = dayjs(timestamp);
+    const diffMs = now.diff(past);
+
+    const d = dayjs.duration(diffMs);
+
+    const days = Math.floor(d.asDays());
+    const hours = d.hours();
+    const minutes = d.minutes();
+    const seconds = d.seconds();
+
+    if (d.asSeconds() < 10) return 'just now';
+
+    const parts = [];
+    if (days > 0) parts.push(`${days}D`);
+    if (hours > 0) parts.push(`${hours}h`);
+    if (minutes > 0) parts.push(`${minutes}min`);
+
+    // Optional: include seconds for short durations
+    if (parts.length === 0 && seconds > 0) parts.push(`${seconds}s`);
+
+    return parts.join(' ') + ' ago';
+}
 export default function HeaderBar({ partnerOnline, partnerLastOnlineAt }: { partnerOnline: boolean, partnerLastOnlineAt: any }) {
     const { scaleFont, user } = useAuth();
     const [lastOnlineAt, setLastOnlineAt] = useState("");
     const setLastOnlineAtString = () => {
-        setLastOnlineAt(partnerLastOnlineAt ? "(" + dayjs().diff(dayjs(partnerLastOnlineAt), 'minutes') + " minutes ago)" : "");
+        setLastOnlineAt(partnerLastOnlineAt ? "(" + formatTimeAgo(partnerLastOnlineAt) + ")" : "");
     }
     useEffect(() => {
         setLastOnlineAtString();

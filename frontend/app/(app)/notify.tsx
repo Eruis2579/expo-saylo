@@ -8,11 +8,16 @@ import React from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { Image, KeyboardAvoidingView, Platform, Text, View } from "react-native";
 export default function Notify() {
-    const { scaleFont } = useAuth();
+    const { scaleFont, requestPair,user } = useAuth();
     const router = useRouter();
     const onSkip = () => {
-        storage.set('notification', false);
-        router.replace('/payment' as any);
+        if(requestPair){
+            storage.set('notification', false);
+            router.replace('/qone' as any);
+        }else{
+            storage.set('notification', false);
+            router.replace('/payment' as any);
+        }
     };
     return (
         <>
@@ -35,7 +40,7 @@ export default function Notify() {
                                 color: '#181818',
                                 lineHeight: scaleFont(57.6),
                             }}>
-                                Receive notification from Alex
+                                Receive notification from {user?.pairs?.[0]?.user?.realname || "Alex"}
                             </Text>
                             <Text style={{
                                 marginTop: scaleFont(16),
@@ -44,7 +49,7 @@ export default function Notify() {
                                 color: '#5F5F5F',
                                 lineHeight: scaleFont(19.2),
                             }}>
-                                Get notified when Alex answers a conversation or adds a memory to your timeline.
+                                Get notified when {user?.pairs?.[0]?.user?.realname || "Alex"} answers a conversation or adds a memory to your timeline.
                             </Text>
                             <View style={{
                                 flexDirection: 'row',
@@ -109,7 +114,7 @@ export default function Notify() {
                                         color: '#5F5F5F',
                                         maxWidth: scaleFont(143),
                                     }}>
-                                        Alex answered a couple quize!
+                                        {user?.pairs?.[0]?.user?.realname || "Alex"} answered a couple quize!
                                         Tap to view
                                     </Text>
                                 </View>
@@ -120,7 +125,11 @@ export default function Notify() {
                             onClick={() => {
                                 storage.set('notification', true);
                                 showToast("Notification successfully enabled.");
-                                router.replace("/payment" as any)
+                                if(requestPair){
+                                    router.replace("/qone" as any)
+                                }else{
+                                    router.replace("/payment" as any)
+                                }
                             }}
                             title="Yes"
                             style={{

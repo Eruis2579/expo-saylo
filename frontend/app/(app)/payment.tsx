@@ -11,18 +11,21 @@ import {
 import axios from 'axios';
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { Animated, Pressable, Text, View } from "react-native";
 function Payment() {
-    const { scaleFont } = useAuth();
+    const { scaleFont, setRequestPair } = useAuth();
     const [clientSecret, setClientSecret] = useState(null);
     const [enabled, setEnabled] = useState(true);
     const [waiting, setWaiting] = useState(false);
     const [period, setPeriod] = useState("")
     const translateX = useState(new Animated.Value(enabled ? 20 : 0))[0];
     const router = useRouter();
+
+    
     const onSkip = () => {
+        setRequestPair(false);
         router.replace('/dashboard' as any);
     };
 
@@ -54,7 +57,7 @@ function Payment() {
                 googlePay: {
                     merchantCountryCode: 'US',
                     currencyCode: 'USD',
-                    testEnv: true, // set false for production
+                    testEnv: false, // set false for production
                 },
             });
 
@@ -342,8 +345,17 @@ function Payment() {
 }
 
 export default function StripePaymentMethod() {
+    const [key, setKey] = useState('');
+    useEffect(()=>{
+        axios.get('/api/stripe/key')
+        .then(res=>{
+            setKey(res.data?.key)
+        }).catch(err=>{
+            console.log(err)
+        })
+    },[])
     return <StripeProvider
-        publishableKey="pk_test_51RbGRp4e36SMDXjvMajGndVpjjctMgYXZF4WZfIcCa9ILKn5tM4UovaLdng5dZ4zOmGpYwjL4cwc0cANei40YH9g00j1O3Xmxw"
+        publishableKey={key}
         merchantIdentifier="merchant.com.saylo"
     >
         <Payment />

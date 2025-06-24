@@ -4,7 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 import { router } from "expo-router";
 import { Image, Text, View } from "react-native";
 export default function Allquestions() {
-    const { scaleFont, user } = useAuth();
+    const { scaleFont, user, requestPair } = useAuth();
     return (
         <>
             <MainLayout2 showHeader={true} showFooter={false} showbar={false} showTopBar={false} current={0} bg="aicoach.png">
@@ -73,7 +73,13 @@ export default function Allquestions() {
                         </View>
                     </View>
                     <ConfirmButton
-                        onClick={() => router.replace("/pairing" as any)}
+                        onClick={() => {
+                            if(requestPair){
+                                router.replace("/payment" as any)
+                            }else{
+                                router.replace("/pairing" as any)
+                            }
+                        }}
                         title="Continue"
                         style={{
                             marginTop: scaleFont(24),

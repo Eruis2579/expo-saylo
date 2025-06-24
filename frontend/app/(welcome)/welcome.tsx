@@ -4,23 +4,27 @@ import MainLayout from '@/components/MainLayout';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { Dimensions, Image, Text, View } from 'react-native';
+import { Image, Text, View } from 'react-native';
 export default function Welcome() {
-    const { scaleFont } = useAuth();
+    const { scaleFont, requestPair } = useAuth();
     const router = useRouter();
     const onContinue = () => {
-        router.replace('/info');
+        if(requestPair){
+            router.replace('/notify');
+        }else{
+            router.replace('/info');
+        }
     }
     return (
         <>
-            <MainLayout showHeader={true} showFooter={false} showbar={false}>
+            <MainLayout showHeader={true} showFooter={false} showbar={false} paddingBottom={45}>
                 <View style={{
                     marginTop: scaleFont(77),
                     flexDirection: 'column',
                     paddingLeft: scaleFont(21),
                     paddingRight: scaleFont(21),
                     justifyContent: 'space-between',
-                    minHeight: Dimensions.get('window').height - scaleFont(208),
+                    flex:1
                 }}>
                     <View style={{
                         flexDirection: 'column',

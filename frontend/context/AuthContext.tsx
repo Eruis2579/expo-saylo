@@ -35,6 +35,8 @@ type AuthContextType = {
   signIn: (user: UserType) => void;
   signOut: () => void;
   scaleFont: (size: number) => number;
+  requestPair: boolean;
+  setRequestPair: (requestPair: boolean) => void;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -45,6 +47,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signIn = (user: UserType) => setUser(user);
   const signOut = () => setUser(null);
   const [screenWidth, setScreenWidth] = useState(Dimensions.get('window').width);
+  const [requestPair, setRequestPair] = useState(false);
 
   useEffect(() => {
     const onChange = ({ window }: { window: { width: number } }) => {
@@ -61,7 +64,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const scaleFont = (size: number) => (screenWidth / 375) * size;
 
   return (
-    <AuthContext.Provider value={{ user, signIn, signOut, scaleFont }}>
+    <AuthContext.Provider value={{ user, signIn, signOut, scaleFont, setRequestPair, requestPair }}>
       {children}
     </AuthContext.Provider>
   );
