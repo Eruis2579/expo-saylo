@@ -15,7 +15,7 @@ export default function RelationThree() {
     const {setWaiting, delWaiting} = useWaiting();
     useEffect(() => {
         if ((user?.friend?.relation as any).find((item: any) => item.summary === "have kids")) {
-            router.replace('/qone');
+            router.replace('/talkai');
         }
     }, [])
     const onContinue = () => {

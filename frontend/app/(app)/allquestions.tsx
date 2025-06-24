@@ -7,7 +7,7 @@ export default function Allquestions() {
     const { scaleFont, user, requestPair } = useAuth();
     return (
         <>
-            <MainLayout2 showHeader={true} showFooter={false} showbar={false} showTopBar={false} current={0} bg="aicoach.png">
+            <MainLayout2 showHeader={true} showFooter={false} showbar={false} showTopBar={false} current={0} paddingBottom={45} bg="aicoach.png">
                 <View style={{
                     marginTop: scaleFont(51),
                     paddingHorizontal: scaleFont(16),

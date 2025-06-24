@@ -130,6 +130,9 @@ export default function Pairing() {
     useEffect(() => {
         if (subscription) {
             return () => {
+                if(waiting['pair-code']){
+                    delWaiting('pair-code');
+                }
                 _unsubscribe();
             };
         }
@@ -252,12 +255,23 @@ export default function Pairing() {
                             onPress={() => {
                                 onShare();
                             }}>
-                            <Text style={{
-                                fontFamily: 'SFProMedium',
-                                fontSize: scaleFont(14),
-                                color: '#181818',
-                                lineHeight: scaleFont(22.4)
-                            }}>Pair Code</Text>
+                            {
+                                waiting['pair-code'] ? (
+                                    <Image
+                                        source={require('@/assets/images/waiting.gif')}
+                                        style={{ 
+                                            width: scaleFont(48), 
+                                            height: scaleFont(48) }}
+                                    />
+                                ) : (
+                                    <Text style={{
+                                        fontFamily: 'SFProMedium',
+                                        fontSize: scaleFont(14),
+                                        color: '#181818',
+                                        lineHeight: scaleFont(22.4)
+                                    }}>Pair Code</Text>
+                                )
+                            }
                         </Pressable>
                     </View>
                 </View>

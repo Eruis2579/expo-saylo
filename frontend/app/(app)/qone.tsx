@@ -89,7 +89,7 @@ export default function Qone() {
         }
     }, [user])
     const onCancelFunc = {
-        0: () => { setScreenStatus({ mainStatus: 0, confirmStatus: 0, messageStatus: 0, contentStatus: 0 }) },
+        0: () => { router.replace('/talkai' as any) },
         1: () => { setScreenStatus({ mainStatus: 0, confirmStatus: 0, messageStatus: 0, contentStatus: 0 }) },
         2: () => { setScreenStatus({ mainStatus: 0, confirmStatus: 0, messageStatus: 0, contentStatus: 0 }) },
     }
