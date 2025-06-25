@@ -1,13 +1,15 @@
 import Bar from "@/components/Aicoach/Bar";
 import ContentList from "@/components/Aicoach/ContentList";
+import { ConfirmButton } from "@/components/Buttons/Confirm";
+import MainLayout from "@/components/MainLayout";
 import MainLayout2 from "@/components/MainLayout2";
 import { useAuth } from "@/context/AuthContext";
 import { storage } from "@/utils/localstorage";
 import { showToast } from "@/utils/showToast";
 import axios from "axios";
 import { router } from "expo-router";
-import React, { useEffect, useState } from "react";
-import { KeyboardAvoidingView, Platform, Text, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { Animated, Image, KeyboardAvoidingView, Platform, Text, View } from "react-native";
 
 const questionList = [
     {
@@ -48,6 +50,37 @@ const questionList = [
     }
 ]
 export default function Qone() {
+    const fadeAnim = useRef(new Animated.Value(1)).current; // Opacity
+    const scaleAnim = useRef(new Animated.Value(1)).current; // Scale X & Y
+    const translateYAnim = useRef(new Animated.Value(0)).current; // Move downward
+    const translateXAnim = useRef(new Animated.Value(0)).current; // Move downward
+
+    useEffect(() => {
+        Animated.parallel([
+            Animated.timing(fadeAnim, {
+                toValue: 0,
+                duration: 1000,
+                useNativeDriver: true,
+            }),
+            Animated.timing(scaleAnim, {
+                toValue: 0.1, // shrink to 30% size
+                duration: 1000,
+                useNativeDriver: true,
+            }),
+            Animated.timing(translateYAnim, {
+                toValue: 900, // move down by 100px
+                duration: 1000,
+                useNativeDriver: true,
+            }),
+            Animated.timing(translateXAnim, {
+                toValue: 100, // move down by 100px
+                duration: 1000,
+                useNativeDriver: true,
+            }),
+        ]).start(() => {
+            // After animation, navigate
+        });
+    }, [])
     const { scaleFont, user, signIn } = useAuth();
     const [screenStatus, setScreenStatus] = useState({
         mainStatus: 0,
@@ -190,6 +223,69 @@ export default function Qone() {
                     </View>
                 </KeyboardAvoidingView>
             </MainLayout2>
+            <Animated.View
+                style={{
+                    position: 'absolute',
+                    zIndex:100,
+                    opacity: fadeAnim,
+                    transform: [
+                        { translateY: translateYAnim },
+                        { translateX: translateXAnim },
+                        { scale: scaleAnim },
+                    ],
+                }}
+            >
+                <MainLayout showHeader={true} showFooter={false} showbar={false} paddingBottom={45}>
+                    <KeyboardAvoidingView
+                        style={{
+                            marginTop: scaleFont(48),
+                            flexDirection: 'column',
+                            paddingLeft: scaleFont(21),
+                            paddingRight: scaleFont(21),
+                            justifyContent: 'space-between',
+                            flex: 1,
+                        }}
+                    >
+                        <View style={{ flexDirection: 'column' }}>
+                            <Image
+                                style={{ width: scaleFont(95), height: scaleFont(99) }}
+                                source={require('@/assets/images/login/sphere.png')}
+                            />
+                            <Text
+                                style={{
+                                    marginTop: scaleFont(17),
+                                    fontFamily: 'SFProSemiBold',
+                                    fontSize: scaleFont(48),
+                                    color: '#181818',
+                                    lineHeight: scaleFont(57.6),
+                                }}
+                            >
+                                Talk with our AI
+                            </Text>
+                            <Text
+                                style={{
+                                    marginTop: scaleFont(16),
+                                    fontFamily: 'SFPro',
+                                    fontSize: scaleFont(14),
+                                    color: '#5F5F5F',
+                                    lineHeight: scaleFont(16.8),
+                                }}
+                            >
+                                A short questionnaire from our AI to get to know your relationship better.
+                                All you need to do is talk to AI
+                            </Text>
+                        </View>
+
+                        <ConfirmButton
+                            title="Continue"
+                            style={{
+                                marginTop: scaleFont(24),
+                                gap: scaleFont(5),
+                            }}
+                        />
+                    </KeyboardAvoidingView>
+                </MainLayout>
+            </Animated.View>
         </>
     )
 }

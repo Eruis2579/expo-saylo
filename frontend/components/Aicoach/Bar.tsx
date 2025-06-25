@@ -3,8 +3,8 @@ import { showToast } from "@/utils/showToast";
 import axios from "axios";
 import { Audio } from 'expo-av';
 import * as FileSystem from 'expo-file-system';
-import { useRef, useState } from "react";
-import { Image, Pressable, View } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { Animated, Image, Pressable, View } from "react-native";
 
 export default function Bar({
     mainStatus = 0,
@@ -30,8 +30,20 @@ export default function Bar({
     waiting: boolean,
     setWaiting: (waiting: boolean) => void,
 }) {
-    const recordingRef = useRef<Audio.Recording | null>(null);
     const { scaleFont } = useAuth();
+    const fadeAnim = useRef(new Animated.Value(1)).current; // Opacity
+    const heightAnim = useRef(new Animated.Value(scaleFont(278))).current;
+    const [show, setShow] = useState(false);
+    useEffect(() => {
+        Animated.timing(heightAnim, {
+            toValue: scaleFont(78), // final height
+            duration: 800, // ms
+            useNativeDriver: false, // height requires nativeDriver: false
+        }).start(
+            () => setShow(true)
+        );
+    }, [])
+    const recordingRef = useRef<Audio.Recording | null>(null);
     const [textHover, setTextHover] = useState(false);
     const cancelButton = {
         icon: require('@/assets/images/aicoach/back.png'),
@@ -170,43 +182,89 @@ export default function Bar({
         },
     ];
     return (
-        <View style={{
-            backgroundColor: '#FFFFFF80',
-            borderRadius: scaleFont(50),
-            borderWidth: scaleFont(1),
-            borderColor: "#F8F8F8",
-            width: scaleFont(236),
-            height: scaleFont(78),
-            alignItems: 'center',
-            justifyContent: "center",
-            flexDirection: 'row',
-            ...(showCancel ? { gap: scaleFont(35) } : { gap: scaleFont(48) }),
-        }}>
-            {[
-                ...(showCancel ? [cancelButton] : []),
-                mainButtons[mainStatus],
-                confirmButtons[confirmStatus]
-            ].map((button, index) => (
-                <Pressable
-                    key={index}
-                    onPress={button.onPress}
-                    onTouchStart={button.onTouchStart}
-                    onTouchEnd={button.onTouchEnd}
-                    style={{
-                        flexDirection: 'row',
+        <>
+            {
+                show && (
+                    <View style={{
+                        backgroundColor: '#FFFFFF80',
+                        borderRadius: scaleFont(50),
+                        borderWidth: scaleFont(1),
+                        borderColor: "#F8F8F8",
+                        width: scaleFont(236),
+                        height: scaleFont(78),
                         alignItems: 'center',
-                    }}
-                >
-                    <Image
-                        source={button.icon}
-                        style={{
-                            width: button.width,
-                            height: button.height,
-                        }}
-                    />
-                </Pressable>
-            ))}
+                        justifyContent: "center",
+                        flexDirection: 'row',
+                        ...(showCancel ? { gap: scaleFont(35) } : { gap: scaleFont(48) }),
+                    }}>
+                        {[
+                            ...(showCancel ? [cancelButton] : []),
+                            mainButtons[mainStatus],
+                            confirmButtons[confirmStatus]
+                        ].map((button, index) => (
+                            <Pressable
+                                key={index}
+                                onPress={button.onPress}
+                                onTouchStart={button.onTouchStart}
+                                onTouchEnd={button.onTouchEnd}
+                                style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <Image
+                                    source={button.icon}
+                                    style={{
+                                        width: button.width,
+                                        height: button.height,
+                                    }}
+                                />
+                            </Pressable>
+                        ))}
 
-        </View>
+                    </View>
+                )
+            }
+            <Animated.View style={{
+                position: 'absolute',
+                zIndex: 100,
+                bottom: scaleFont(0),
+                backgroundColor: '#FFFFFF80',
+                borderRadius: scaleFont(60),
+                borderWidth: scaleFont(1),
+                borderColor: "#F8F8F8",
+                width: scaleFont(236),
+                height: heightAnim,
+                flexDirection: 'row',
+                justifyContent: "center",
+                ...(showCancel ? { gap: scaleFont(35) } : { gap: scaleFont(48) }),
+            }}>
+                {[
+                    ...(showCancel ? [cancelButton] : []),
+                    mainButtons[mainStatus],
+                    confirmButtons[confirmStatus]
+                ].map((button, index) => (
+                    <Pressable
+                        key={index}
+                        onPress={button.onPress}
+                        onTouchStart={button.onTouchStart}
+                        onTouchEnd={button.onTouchEnd}
+                        style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Image
+                            source={button.icon}
+                            style={{
+                                width: button.width,
+                                height: button.height,
+                            }}
+                        />
+                    </Pressable>
+                ))}
+
+            </Animated.View>
+        </>
     )
 }
