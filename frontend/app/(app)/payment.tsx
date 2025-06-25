@@ -350,7 +350,6 @@ export default function StripePaymentMethod() {
         axios.get('/stripe/key')
         .then(res=>{
             setKey(res.data?.key)
-            showToast(res.data?.key)
         }).catch(err=>{
             console.log(err)
         })

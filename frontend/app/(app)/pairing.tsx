@@ -128,11 +128,11 @@ export default function Pairing() {
         }
     }, [])
     useEffect(() => {
-        if (subscription) {
-            return () => {
-                if(waiting['pair-code']){
-                    delWaiting('pair-code');
-                }
+        return () => {
+            if(waiting['pair-code']){
+                delWaiting('pair-code');
+            }
+            if (subscription) {
                 _unsubscribe();
             };
         }
