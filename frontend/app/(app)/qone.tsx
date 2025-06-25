@@ -1,8 +1,8 @@
 import Bar from "@/components/Aicoach/Bar";
 import ContentList from "@/components/Aicoach/ContentList";
 import { ConfirmButton } from "@/components/Buttons/Confirm";
-import MainLayout from "@/components/MainLayout";
 import MainLayout2 from "@/components/MainLayout2";
+import MainLayout from "@/components/MainLayout3";
 import { useAuth } from "@/context/AuthContext";
 import { storage } from "@/utils/localstorage";
 import { showToast } from "@/utils/showToast";
@@ -50,6 +50,7 @@ const questionList = [
     }
 ]
 export default function Qone() {
+    const backgroundFadeAnim = useRef(new Animated.Value(1)).current; // Background opacity
     const fadeAnim = useRef(new Animated.Value(1)).current; // Opacity
     const scaleAnim = useRef(new Animated.Value(1)).current; // Scale X & Y
     const translateYAnim = useRef(new Animated.Value(0)).current; // Move downward
@@ -57,24 +58,29 @@ export default function Qone() {
 
     useEffect(() => {
         Animated.parallel([
+            Animated.timing(backgroundFadeAnim, {
+                toValue: 0,
+                duration: 400,
+                useNativeDriver: true,
+            }),
             Animated.timing(fadeAnim, {
                 toValue: 0,
-                duration: 1000,
+                duration: 700,
                 useNativeDriver: true,
             }),
-            Animated.timing(scaleAnim, {
-                toValue: 0.1, // shrink to 30% size
-                duration: 1000,
-                useNativeDriver: true,
-            }),
+            // Animated.timing(scaleAnim, {
+            //     toValue: 0.1, // shrink to 30% size
+            //     duration: 1000,
+            //     useNativeDriver: true,
+            // }),
             Animated.timing(translateYAnim, {
                 toValue: 900, // move down by 100px
-                duration: 1000,
+                duration: 700,
                 useNativeDriver: true,
             }),
             Animated.timing(translateXAnim, {
                 toValue: 100, // move down by 100px
-                duration: 1000,
+                duration: 700,
                 useNativeDriver: true,
             }),
         ]).start(() => {
@@ -231,11 +237,10 @@ export default function Qone() {
                     transform: [
                         { translateY: translateYAnim },
                         { translateX: translateXAnim },
-                        { scale: scaleAnim },
                     ],
                 }}
             >
-                <MainLayout showHeader={true} showFooter={false} showbar={false} paddingBottom={45}>
+                <MainLayout showHeader={true} showFooter={false} showbar={false} paddingBottom={45} backgroundFadeAnim={backgroundFadeAnim}>
                     <KeyboardAvoidingView
                         style={{
                             marginTop: scaleFont(48),

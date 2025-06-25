@@ -32,12 +32,12 @@ export default function Bar({
 }) {
     const { scaleFont } = useAuth();
     const fadeAnim = useRef(new Animated.Value(1)).current; // Opacity
-    const heightAnim = useRef(new Animated.Value(scaleFont(278))).current;
+    const heightAnim = useRef(new Animated.Value(scaleFont(378))).current;
     const [show, setShow] = useState(false);
     useEffect(() => {
         Animated.timing(heightAnim, {
             toValue: scaleFont(78), // final height
-            duration: 800, // ms
+            duration: 700, // ms
             useNativeDriver: false, // height requires nativeDriver: false
         }).start(
             () => setShow(true)
