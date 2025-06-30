@@ -17,14 +17,14 @@ export default function Qone() {
         messageStatus: 0,
         contentStatus: 0,
     })
-    const {setWaiting, delWaiting} = useWaiting();
+    const { setWaiting, delWaiting } = useWaiting();
     const [messageList, setMessageList] = useState({
         0: "",
         1: "Let's talk",
         2: "",
         3: "Tell me more about yours releationship.",
     })
-    const onCancelFunc =()=> {
+    const onCancelFunc = () => {
         setScreenStatus({ mainStatus: 0, confirmStatus: 0, messageStatus: 0, contentStatus: 0 })
     }
     useEffect(() => {
@@ -38,6 +38,13 @@ export default function Qone() {
             }
         }
     }, [messageList])
+
+    // useEffect(() => {
+    //     Audio.Sound.createAsync(
+    //         { uri: "https://sayloapp.com/api/coach/test" },
+    //         { shouldPlay: true }
+    //     );
+    // }, [])
     const onConfirm = () => {
         setWaiting("global");
         axios.post('/coach/self/chat', {
@@ -47,7 +54,7 @@ export default function Qone() {
                 delWaiting("global");
                 setMessageList({
                     ...messageList,
-                    [0]:"",
+                    [0]: "",
                     [2]: res.data,
                 })
                 setScreenStatus({ mainStatus: 0, confirmStatus: 0, messageStatus: 2, contentStatus: 2 })
@@ -116,7 +123,7 @@ export default function Qone() {
                                 onConfirm={onConfirm}
                             />
                             <Tab style={{
-                                marginTop:scaleFont(42)
+                                marginTop: scaleFont(42)
                             }} current={2} coachLink="/chat" />
                         </View>
                     </View>

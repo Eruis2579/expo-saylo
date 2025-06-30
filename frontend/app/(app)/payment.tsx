@@ -35,8 +35,9 @@ function Payment() {
             toValue,
             duration: 200,
             useNativeDriver: true,
-        }).start();
-        setEnabled(!enabled);
+        }).start(() => {
+            setEnabled(!enabled);
+        });
     };
     const openStripeSheet = async () => {
         try {
