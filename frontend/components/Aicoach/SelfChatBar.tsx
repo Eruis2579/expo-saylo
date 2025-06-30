@@ -116,7 +116,7 @@ export default function SelfChatBar({
             const response = await fetch('https://api.openai.com/v1/audio/speech', {
                 method: 'POST',
                 headers: {
-                    'Authorization': 'Bearer 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', // replace with your key
+                    'Authorization': 'Bearer ', // replace with your key
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
