@@ -40,11 +40,41 @@ export default function Qone() {
     }, [messageList])
 
     // useEffect(() => {
-    //     Audio.Sound.createAsync(
-    //         { uri: "https://sayloapp.com/api/coach/test" },
-    //         { shouldPlay: true }
-    //     );
-    // }, [])
+    //     let sound: Audio.Sound;
+    
+    //     const playSound = async () => {
+    //         try {
+    //             await Audio.setAudioModeAsync({
+    //                 allowsRecordingIOS: false,
+    //                 playsInSilentModeIOS: true,
+    //             });
+    
+    //             const { sound: loadedSound } = await Audio.Sound.createAsync(
+    //                 { uri: "https://sayloapp.com/api/coach/test" },
+    //                 { shouldPlay: true }
+    //             );
+    
+    //             sound = loadedSound;
+    
+    //             // Optional: unload when done
+    //             sound.setOnPlaybackStatusUpdate(async (status) => {
+    //                 if (status.isLoaded && status.didJustFinish) {
+    //                     await sound.unloadAsync();
+    //                 }
+    //             });
+    //         } catch (error) {
+    //             console.error("Audio playback error:", error);
+    //         }
+    //     };
+    
+    //     playSound();
+    
+    //     return () => {
+    //         if (sound) {
+    //             sound.unloadAsync();
+    //         }
+    //     };
+    // }, []);
     const onConfirm = () => {
         setWaiting("global");
         axios.post('/coach/self/chat', {
